@@ -1364,12 +1364,15 @@
 //   }
 // }
 
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> 3d1ea88ac8658e37e7d7bcd695ad4640a252f6c7
 import 'dart:math';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
