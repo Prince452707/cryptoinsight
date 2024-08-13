@@ -2761,8 +2761,7 @@
 
 
 
-
-
+import 'similar_coins.dart';
 import 'dart:math';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -3517,6 +3516,231 @@ class ApiService {
   }
 }
 
+// class CryptocurrencyDetailScreen extends StatefulWidget {
+//   final Cryptocurrency cryptocurrency;
+
+//   const CryptocurrencyDetailScreen({Key? key, required this.cryptocurrency}) : super(key: key);
+
+//   @override
+//   _CryptocurrencyDetailScreenState createState() => _CryptocurrencyDetailScreenState();
+// }
+
+// class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen> with SingleTickerProviderStateMixin {
+//   late TabController _tabController;
+//   late ScrollController _scrollController;
+  
+//   Map<String, dynamic> details = {};
+//   bool isLoading = true;
+//   bool isChartLoading = true;
+//   List<FlSpot> priceData = [];
+//   int selectedChartDays = 7;
+//   Map<String, String> aiAnalysis = {
+//     'general': 'Loading...',
+//     'news': 'Loading...',
+//     'fundamental': 'Loading...',
+//     'team': 'Loading...',
+//   };
+//   String aiQuestion = '';
+//   String aiAnswer = '';
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _tabController = TabController(length: 5, vsync: this);
+//     _scrollController = ScrollController();
+//     fetchDetails();
+//     fetchComprehensiveAnalysis();
+//   }
+
+//   @override
+//   void dispose() {
+//     _tabController.dispose();
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
+
+//   Future<void> fetchDetails() async {
+//     setState(() => isLoading = true);
+//     try {
+//       final fetchedDetails = await ApiService.getCryptocurrencyDetails(widget.cryptocurrency.id);
+//       setState(() {
+//         details = fetchedDetails;
+//         isLoading = false;
+//       });
+//       fetchMarketChart();
+//     } catch (e) {
+//       setState(() => isLoading = false);
+//       _showErrorSnackbar('Failed to fetch cryptocurrency details');
+//     }
+//   }
+
+//   Future<void> fetchMarketChart() async {
+//     setState(() => isChartLoading = true);
+//     try {
+//       final chartData = await ApiService.getMarketChart(widget.cryptocurrency.id, selectedChartDays);
+//       setState(() {
+//         priceData = chartData.map((point) => FlSpot(point[0].toDouble(), point[1].toDouble())).toList();
+//         isChartLoading = false;
+//       });
+//     } catch (e) {
+//       setState(() => isChartLoading = false);
+//       _showErrorSnackbar('Failed to fetch market chart data');
+//     }
+//   }
+
+//   Future<void> fetchComprehensiveAnalysis() async {
+//     try {
+//       final analysis = await AIService.generateComprehensiveAnalysis(widget.cryptocurrency);
+//       setState(() {
+//         aiAnalysis = analysis;
+//       });
+//     } catch (e) {
+//       _showErrorSnackbar('Failed to fetch AI analysis');
+//     }
+//   }
+//   Future<void> askAIQuestion() async {
+//   if (aiQuestion.isEmpty) return;
+
+//   setState(() => aiAnswer = 'Loading...');
+
+//   try {
+//     // Use the latest details from the WebSocket connection
+//     final response = await AIService.generateAIResponse(
+//       "Answer this question about ${details['name']} (${details['symbol']}) as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}: $aiQuestion"
+//     );
+//     setState(() => aiAnswer = response);
+//   } catch (e) {
+//     setState(() => aiAnswer = 'Failed to get AI response');
+//   }
+// }
+
+//   // Future<void> askAIQuestion() async {
+//   //   if (aiQuestion.isEmpty) return;
+//   //   setState(() => aiAnswer = 'Loading...');
+//   //   try {
+//   //     final answer = await AIService.generateAIResponse(
+//   //       "Answer this question about ${widget.cryptocurrency.name}: $aiQuestion"
+//   //     );
+//   //     setState(() => aiAnswer = answer);
+//   //   } catch (e) {
+//   //     setState(() => aiAnswer = 'Failed to get AI response');
+//   //   }
+//   // }
+
+//   void _showErrorSnackbar(String message) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(
+//         content: Text(message),
+//         backgroundColor: Colors.red,
+//         behavior: SnackBarBehavior.floating,
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: NestedScrollView(
+//         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+//           return [
+//             SliverAppBar(
+//               expandedHeight: 200.0,
+//               floating: false,
+//               pinned: true,
+//               flexibleSpace: FlexibleSpaceBar(
+//                 title: Text(widget.cryptocurrency.name,
+//                   style: const TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold,
+//                     shadows: [Shadow(blurRadius: 2.0, color: Colors.black45, offset: Offset(1.0, 1.0))],
+//                   ),
+//                 ),
+//                 background: Stack(
+//                   fit: StackFit.expand,
+//                   children: [
+//                     Hero(
+//                       tag: 'crypto-${widget.cryptocurrency.id}',
+//                       child: CachedNetworkImage(
+//                         imageUrl: widget.cryptocurrency.image,
+//                         fit: BoxFit.cover,
+//                         color: Colors.black.withOpacity(0.5),
+//                         colorBlendMode: BlendMode.darken,
+//                       ),
+//                     ),
+//                     Positioned(
+//                       bottom: 60,
+//                       left: 16,
+//                       child: CircleAvatar(
+//                         backgroundImage: CachedNetworkImageProvider(widget.cryptocurrency.image),
+//                         radius: 30,
+//                         backgroundColor: Colors.white,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               actions: [
+//                 IconButton(
+//                   icon: const Icon(Icons.refresh),
+//                   onPressed: fetchDetails,
+//                 ),
+//               ],
+//             ),
+//           ];
+//         },
+//         body: isLoading
+//             ? _buildLoadingScreen()
+//             : Column(
+//                 children: [
+//                   _buildPriceHeader(),
+//                   TabBar(
+//                     controller: _tabController,
+//                     labelColor: Theme.of(context).primaryColor,
+//                     unselectedLabelColor: Colors.grey,
+//                     indicatorColor: Theme.of(context).primaryColor,
+//                     isScrollable: true,
+//                     tabs: const [
+//                       Tab(text: 'Overview'),
+//                       Tab(text: 'Chart'),
+//                       Tab(text: 'AI Insights'),
+//                       Tab(text: 'AI Q&A'),
+//                       Tab(text: 'Details'),
+//                     ],
+//                   ),
+//                   Expanded(
+//                     child: TabBarView(
+//                       controller: _tabController,
+//                       children: [
+//                         _buildOverviewTab(),
+//                         _buildChartTab(),
+//                         _buildAIInsightsTab(),
+//                         _buildAIQATab(),
+//                         _buildDetailsTab(),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildLoadingScreen() {
+//     return Shimmer.fromColors(
+//       baseColor: Colors.grey[300]!,
+//       highlightColor: Colors.grey[100]!,
+//       child: ListView.builder(
+//         itemCount: 10,
+//         itemBuilder: (context, index) => Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Container(
+//             height: 80,
+//             color: Colors.white,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 class CryptocurrencyDetailScreen extends StatefulWidget {
   final Cryptocurrency cryptocurrency;
 
@@ -3599,34 +3823,19 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
       _showErrorSnackbar('Failed to fetch AI analysis');
     }
   }
+
   Future<void> askAIQuestion() async {
-  if (aiQuestion.isEmpty) return;
-
-  setState(() => aiAnswer = 'Loading...');
-
-  try {
-    // Use the latest details from the WebSocket connection
-    final response = await AIService.generateAIResponse(
-      "Answer this question about ${details['name']} (${details['symbol']}) as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}: $aiQuestion"
-    );
-    setState(() => aiAnswer = response);
-  } catch (e) {
-    setState(() => aiAnswer = 'Failed to get AI response');
+    if (aiQuestion.isEmpty) return;
+    setState(() => aiAnswer = 'Loading...');
+    try {
+      final answer = await AIService.generateAIResponse(
+        "Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}: $aiQuestion"
+      );
+      setState(() => aiAnswer = answer);
+    } catch (e) {
+      setState(() => aiAnswer = 'Failed to get AI response');
+    }
   }
-}
-
-  // Future<void> askAIQuestion() async {
-  //   if (aiQuestion.isEmpty) return;
-  //   setState(() => aiAnswer = 'Loading...');
-  //   try {
-  //     final answer = await AIService.generateAIResponse(
-  //       "Answer this question about ${widget.cryptocurrency.name}: $aiQuestion"
-  //     );
-  //     setState(() => aiAnswer = answer);
-  //   } catch (e) {
-  //     setState(() => aiAnswer = 'Failed to get AI response');
-  //   }
-  // }
 
   void _showErrorSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -3634,6 +3843,15 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
         content: Text(message),
         backgroundColor: Colors.red,
         behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void showSimilarCryptocurrencies(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SimilarCryptocurrenciesScreen(cryptocurrency: widget.cryptocurrency),
       ),
     );
   }
@@ -3723,6 +3941,11 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
                 ],
               ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => showSimilarCryptocurrencies(context),
+        label: const Text('Similar Cryptocurrencies'),
+        icon: const Icon(Icons.compare_arrows),
+      ),
     );
   }
 
@@ -3742,7 +3965,6 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
       ),
     );
   }
-
   Widget _buildPriceHeader() {
     return Container(
       padding: const EdgeInsets.all(16),
