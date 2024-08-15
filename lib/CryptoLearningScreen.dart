@@ -669,7 +669,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:convert';
+
 
 class CryptoLearningScreen extends StatefulWidget {
   @override
@@ -680,7 +680,6 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
-  String _searchQuery = '';
   String _aiResponse = '';
   bool _isLoading = false;
   List<String> _bookmarks = [];
@@ -731,7 +730,7 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
     try {
       final model = GenerativeModel(
         model: 'gemini-pro',
-        apiKey: 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y', // Replace with your actual Gemini API key
+        apiKey: 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y',
       );
 
       final content = [
@@ -985,77 +984,86 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
       },
     );
   }
-
-  Widget _buildContent() {
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    } else if (_aiResponse.isNotEmpty) {
-      return SingleChildScrollView(
-        controller: _scrollController,
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+Widget _buildContent() {
+  return SingleChildScrollView(
+    controller: _scrollController,
+    child: Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (_isLoading)
+            Center(child: CircularProgressIndicator())
+          else if (_aiResponse.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _searchController.text,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _searchController.text,
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        _bookmarks.contains(_searchController.text) ? Icons.bookmark : Icons.bookmark_border,
+                      ),
+                      onPressed: () => _toggleBookmark(_searchController.text),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Icon(
-                    _bookmarks.contains(_searchController.text) ? Icons.bookmark : Icons.bookmark_border,
+                SizedBox(height: 16),
+                MarkdownBody(
+                  data: _aiResponse,
+                  onTapLink: (text, url, title) {
+                    if (url != null) {
+                      launchUrl(Uri.parse(url));
+                    }
+                  },
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _generateAIResponse(_searchController.text + " Provide more advanced information on this topic.");
+                      },
+                      child: Text('Learn More'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _generateAIResponse(_searchController.text + " Give me a practical example or use case.");
+                      },
+                      child: Text('Practical Example'),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          else
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.school, size: 64, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'Search for a cryptocurrency topic to start learning',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    textAlign: TextAlign.center,
                   ),
-                  onPressed: () => _toggleBookmark(_searchController.text),
-                ),
-              ],
+                ],
+              ),
             ),
-            SizedBox(height: 16),
-            MarkdownBody(
-              data: _aiResponse,
-              onTapLink: (text, url, title) {
-                if (url != null) {
-                  launchUrl(Uri.parse(url));
-                }
-              },
-            ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _generateAIResponse(_searchController.text + " Provide more advanced information on this topic.");
-                  },
-                  child: Text('Learn More'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _generateAIResponse(_searchController.text + " Give me a practical example or use case.");
-                  },
-                  child: Text('Practical Example'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.school, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'Search for a cryptocurrency topic to start learning',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-  }
+        ],
+      ),
+    ),
+  );
+}
 }
