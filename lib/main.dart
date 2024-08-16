@@ -5495,7 +5495,7 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
             if (details['links']?['facebook_username'] != null)
               _buildLinkItem('Facebook', 'https://facebook.com/${details['links']['facebook_username']}'),
             if (details['links']?['subreddit_url'] != null)
-              _buildLinkItem('Reddit', details['links']['subreddit_url']),
+              _buildLinkItem('Reddit',details['links']['subreddit_url']),
           ],
         ),
       ),
