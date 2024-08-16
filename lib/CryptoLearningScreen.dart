@@ -2,14 +2,13 @@
 // import 'package:google_generative_ai/google_generative_ai.dart';
 // import 'dart:async';
 
-
 // class CryptoLearningAIScreen extends StatefulWidget {
 //   @override
 //   _CryptoLearningAIScreenState createState() => _CryptoLearningAIScreenState();
 // }
 
 // class _CryptoLearningAIScreenState extends State<CryptoLearningAIScreen> {
-//   static const String apiKey = 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y'; 
+//   static const String apiKey = 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y';
 //   final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
 
 //   final List<LearningTopic> allTopics = [
@@ -237,20 +236,6 @@
 //   LearningTopic(this.title, this.description);
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import 'package:flutter/material.dart';
 // import 'package:google_generative_ai/google_generative_ai.dart';
 // import 'dart:async';
@@ -263,7 +248,7 @@
 // }
 
 // class _CryptoLearningAIScreenState extends State<CryptoLearningAIScreen> {
-//   static const String apiKey = 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y'; 
+//   static const String apiKey = 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y';
 //   final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
 
 //   List<LearningTopic> allTopics = [];
@@ -598,85 +583,19 @@
 //   LearningTopic(this.title, this.description, {this.keywords = const []});
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class CryptoLearningScreen extends StatefulWidget {
   @override
   _CryptoLearningScreenState createState() => _CryptoLearningScreenState();
 }
 
-class _CryptoLearningScreenState extends State<CryptoLearningScreen> with SingleTickerProviderStateMixin {
+class _CryptoLearningScreenState extends State<CryptoLearningScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
@@ -735,12 +654,11 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
 
       final content = [
         Content.text(
-          'Provide a comprehensive explanation about the following cryptocurrency topic: $prompt. '
-          'Include key concepts, real-world applications, advantages, disadvantages, and current trends. '
-          'Mention some popular projects or platforms related to this topic. '
-          'Format the response using Markdown, including headers, bullet points, and emphasis where appropriate. '
-          'If relevant, include code snippets or examples.'
-        )
+            'Provide a comprehensive explanation about the following cryptocurrency topic: $prompt. '
+            'Include key concepts, real-world applications, advantages, disadvantages, and current trends. '
+            'Mention some popular projects or platforms related to this topic. '
+            'Format the response using Markdown, including headers, bullet points, and emphasis where appropriate. '
+            'If relevant, include code snippets or examples.')
       ];
 
       final response = await model.generateContent(content);
@@ -856,48 +774,50 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
       },
     );
   }
-  Widget _buildSearchBar() {
-  final TextTheme textTheme = Theme.of(context).textTheme;
-  final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-  return Container(
-    padding: EdgeInsets.all(16),
-    color: Theme.of(context).primaryColor,
-    child: Column(
-      children: [
-        TextField(
-          controller: _searchController,
-          style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
-          decoration: InputDecoration(
-            hintText: 'Search cryptocurrency topics...',
-            hintStyle: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
-            fillColor: colorScheme.surface,
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
+  Widget _buildSearchBar() {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      color: Theme.of(context).primaryColor,
+      child: Column(
+        children: [
+          TextField(
+            controller: _searchController,
+            style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
+            decoration: InputDecoration(
+              hintText: 'Search cryptocurrency topics...',
+              hintStyle: textTheme.bodyLarge
+                  ?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+              fillColor: colorScheme.surface,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search, color: colorScheme.onSurface),
+                onPressed: () {
+                  if (_searchController.text.isNotEmpty) {
+                    _generateAIResponse(_searchController.text);
+                  }
+                },
+              ),
             ),
-            suffixIcon: IconButton(
-              icon: Icon(Icons.search, color: colorScheme.onSurface),
-              onPressed: () {
-                if (_searchController.text.isNotEmpty) {
-                  _generateAIResponse(_searchController.text);
-                }
-              },
-            ),
+            onSubmitted: (value) {
+              if (value.isNotEmpty) {
+                _generateAIResponse(value);
+              }
+            },
           ),
-          onSubmitted: (value) {
-            if (value.isNotEmpty) {
-              _generateAIResponse(value);
-            }
-          },
-        ),
-        SizedBox(height: 16),
-        _buildCategoryTabs(),
-      ],
-    ),
-  );
-}
+          SizedBox(height: 16),
+          _buildCategoryTabs(),
+        ],
+      ),
+    );
+  }
 
   // Widget _buildSearchBar() {
   //   return Container(
@@ -951,7 +871,8 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
               },
               child: Text(category),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Theme.of(context).primaryColor, backgroundColor: Colors.white,
+                foregroundColor: Theme.of(context).primaryColor,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -984,86 +905,93 @@ class _CryptoLearningScreenState extends State<CryptoLearningScreen> with Single
       },
     );
   }
-Widget _buildContent() {
-  return SingleChildScrollView(
-    controller: _scrollController,
-    child: Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (_isLoading)
-            Center(child: CircularProgressIndicator())
-          else if (_aiResponse.isNotEmpty)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _searchController.text,
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        _bookmarks.contains(_searchController.text) ? Icons.bookmark : Icons.bookmark_border,
-                      ),
-                      onPressed: () => _toggleBookmark(_searchController.text),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                MarkdownBody(
-                  data: _aiResponse,
-                  onTapLink: (text, url, title) {
-                    if (url != null) {
-                      launchUrl(Uri.parse(url));
-                    }
-                  },
-                ),
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _generateAIResponse(_searchController.text + " Provide more advanced information on this topic.");
-                      },
-                      child: Text('Learn More'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _generateAIResponse(_searchController.text + " Give me a practical example or use case.");
-                      },
-                      child: Text('Practical Example'),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          else
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+
+  Widget _buildContent() {
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_isLoading)
+              Center(child: CircularProgressIndicator())
+            else if (_aiResponse.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.school, size: 64, color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _searchController.text,
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          _bookmarks.contains(_searchController.text)
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
+                        ),
+                        onPressed: () =>
+                            _toggleBookmark(_searchController.text),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 16),
-                  Text(
-                    'Search for a cryptocurrency topic to start learning',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                    textAlign: TextAlign.center,
+                  MarkdownBody(
+                    data: _aiResponse,
+                    onTapLink: (text, url, title) {
+                      if (url != null) {
+                        launchUrl(Uri.parse(url));
+                      }
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _generateAIResponse(_searchController.text +
+                              " Provide more advanced information on this topic.");
+                        },
+                        child: Text('Learn More'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _generateAIResponse(_searchController.text +
+                              " Give me a practical example or use case.");
+                        },
+                        child: Text('Practical Example'),
+                      ),
+                    ],
                   ),
                 ],
+              )
+            else
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.school, size: 64, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      'Search for a cryptocurrency topic to start learning',
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
