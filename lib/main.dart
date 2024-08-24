@@ -5576,7 +5576,7 @@
 
 
 
-
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'similar_coins.dart';
 import 'dart:math';
 import 'package:shimmer/shimmer.dart';
@@ -6217,6 +6217,34 @@ class AIService {
       "3. Upcoming events or releases in the next 30 days\n"
       "4. Current market sentiment and social media buzz\n"
       "5. Any recent regulatory news affecting ${crypto.name}\n"
+      "Provide a comprehensive A to Z fundamental analysis of ${crypto.name} (${crypto.symbol}) as of $currentDate. Cover:\n"
+"1. Architecture: Explain the blockchain architecture and consensus mechanism\n"
+"2. Business model: Describe the project's business model and value proposition\n"
+"3. Competitive landscape: Compare with similar projects in the market\n"
+"4. Developer activity: Recent GitHub commits, contributors, and development progress\n"
+"5. Economic model: Token economics, distribution, and inflation/deflation mechanisms\n"
+"6. Funding: Initial and ongoing funding, including venture capital investments\n"
+"7. Governance: Decision-making processes and community involvement\n"
+"8. Hash rate (for PoW) or Staking statistics (for PoS): Network security metrics\n"
+"9. Innovations: Unique features or technological advancements\n"
+"10. Joint ventures and partnerships: Recent and significant collaborations\n"
+"11. Key team members: Backgrounds of founders and core team\n"
+"12. Liquidity: Trading volume across exchanges and DeFi protocols\n"
+"13. Market adoption: Real-world use cases and user growth metrics\n"
+"14. Network effects: How the project benefits from increased adoption\n"
+"15. On-chain metrics: Active addresses, transaction count, and network usage\n"
+"16. Planned upgrades: Roadmap and upcoming protocol changes\n"
+"17. Quality of documentation: Whitepaper, technical docs, and community resources\n"
+"18. Regulatory compliance: Legal status and compliance efforts\n"
+"19. Scalability: Current and planned solutions for network scaling\n"
+"20. Tokenomics: Detailed analysis of token utility and economic design\n"
+"21. Use cases: Current and potential applications of the technology\n"
+"22. Vulnerabilities: Known security issues or potential attack vectors\n"
+"23. Wallet ecosystem: Available storage solutions and integrations\n"
+"24. X-factor: Unique selling points or competitive advantages\n"
+"25. Yield opportunities: Staking, farming, or other reward mechanisms\n"
+"26. Zero-knowledge proofs (if applicable): Privacy features and implementations\n"
+"Prioritize the most relevant and recent information. Provide specific data points, dates, and metrics where possible."
       "Prioritize information from the last 30 days and specify dates for any mentioned events or updates."
     );
 
@@ -6712,22 +6740,30 @@ Widget _buildLoadingScreen() {
     );
   }
 
-  Widget _buildAIInsightCard(String title, String content) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: const EdgeInsets.only(bottom: 16),
-      child: ExpansionTile(
-        title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(content),
+ Widget _buildAIInsightCard(String title, String content) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    margin: const EdgeInsets.only(bottom: 16),
+    child: ExpansionTile(
+      title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: MarkdownBody(
+            data: content,
+            styleSheet: MarkdownStyleSheet(
+              p: TextStyle(fontSize: 14),
+              h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              h3: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildChartButton(String label, int days) {
     return ElevatedButton(
@@ -6756,29 +6792,37 @@ Widget _buildLoadingScreen() {
     );
   }
 
-  Widget _buildAIQATab() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 16),
-        TextField(
-          onChanged: (value) => setState(() => aiQuestion = value),
-          decoration: InputDecoration(
-            hintText: 'Enter your question here',
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: askAIQuestion,
-            ),
+Widget _buildAIQATab() {
+  return ListView(
+    padding: const EdgeInsets.all(16),
+    children: [
+      const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      const SizedBox(height: 16),
+      TextField(
+        onChanged: (value) => setState(() => aiQuestion = value),
+        decoration: InputDecoration(
+          hintText: 'Enter your question here',
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: askAIQuestion,
           ),
         ),
-        const SizedBox(height: 16),
-        const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Text(aiAnswer),
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 16),
+      const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      const SizedBox(height: 8),
+      MarkdownBody(
+        data: aiAnswer,
+        styleSheet: MarkdownStyleSheet(
+          p: TextStyle(fontSize: 14),
+          h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          h3: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    ],
+  );
+}
 
   Widget _buildDetailsTab() {
     return ListView(
