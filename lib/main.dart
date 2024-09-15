@@ -7066,32 +7066,7 @@ class AIInsightsTab extends StatelessWidget {
     }
   }
 }
-// class AIInsightsTab extends StatelessWidget {
-//   final Map<String, String> aiAnalysis;
-//   final VoidCallback onRefresh;
 
-//   const AIInsightsTab({Key? key, required this.aiAnalysis, required this.onRefresh}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       padding: const EdgeInsets.all(16),
-//       children: [
-//         const Text('AI Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 16),
-//         AIInsightCard(title: 'General Analysis', content: aiAnalysis['general']!),
-//         AIInsightCard(title: 'Latest News', content: aiAnalysis['news']!),
-//         AIInsightCard(title: 'Fundamental Analysis', content: aiAnalysis['fundamental']!),
-//         AIInsightCard(title: 'Team Details', content: aiAnalysis['team']!),
-//         const SizedBox(height: 16),
-//         ElevatedButton(
-//           onPressed: onRefresh,
-//           child: const Text('Refresh AI Insights'),
-//         ),
-//       ],
-//     );
-//   }
-// }
 class AIInsightCard extends StatelessWidget {
   final String title;
   final String content;
