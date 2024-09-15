@@ -7060,6 +7060,7 @@ class AIInsightCard extends StatelessWidget {
   }
 }
 
+
 // class AIInsightCard extends StatelessWidget {
 //   final String title;
 //   final String content;
@@ -7089,54 +7090,6 @@ class AIInsightCard extends StatelessWidget {
 //           ),
 //         ],
 //       ),
-//     );
-//   }
-// }
-
-// class AIQATab extends StatelessWidget {
-//   final String aiQuestion;
-//   final String aiAnswer;
-//   final Function(String) onQuestionChanged;
-//   final VoidCallback onAskQuestion;
-
-//   const AIQATab({
-//     Key? key,
-//     required this.aiQuestion,
-//     required this.aiAnswer,
-//     required this.onQuestionChanged,
-//     required this.onAskQuestion,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       padding: const EdgeInsets.all(16),
-//       children: [
-//         const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 16),
-//         TextField(
-//           onChanged: onQuestionChanged,
-//           decoration: InputDecoration(
-//             hintText: 'Enter your question here',
-//             suffixIcon: IconButton(
-//               icon: const Icon(Icons.send),
-//               onPressed: onAskQuestion,
-//             ),
-//           ),
-//         ),
-//         const SizedBox(height: 16),
-//         const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 8),
-//         MarkdownBody(
-//           data: aiAnswer,
-//           styleSheet: MarkdownStyleSheet(
-//             p: TextStyle(fontSize: 14),
-//             h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//             h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//             h3: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//           ),
-//         ),
-//       ],
 //     );
 //   }
 // }
@@ -7193,6 +7146,54 @@ class AIQATab extends StatelessWidget {
     );
   }
 }
+// class AIQATab extends StatelessWidget {
+//   final String aiQuestion;
+//   final String aiAnswer;
+//   final Function(String) onQuestionChanged;
+//   final VoidCallback onAskQuestion;
+
+//   const AIQATab({
+//     Key? key,
+//     required this.aiQuestion,
+//     required this.aiAnswer,
+//     required this.onQuestionChanged,
+//     required this.onAskQuestion,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView(
+//       padding: const EdgeInsets.all(16),
+//       children: [
+//         const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//         const SizedBox(height: 16),
+//         TextField(
+//           onChanged: onQuestionChanged,
+//           decoration: InputDecoration(
+//             hintText: 'Enter your question here',
+//             suffixIcon: IconButton(
+//               icon: const Icon(Icons.send),
+//               onPressed: onAskQuestion,
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 16),
+//         const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+//         const SizedBox(height: 8),
+//         MarkdownBody(
+//           data: aiAnswer,
+//           styleSheet: MarkdownStyleSheet(
+//             p: TextStyle(fontSize: 14),
+//             h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//             h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//             h3: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
 class DetailsTab extends StatelessWidget {
   final Map<String, dynamic> details;
 
