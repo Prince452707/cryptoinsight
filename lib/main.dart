@@ -6960,11 +6960,56 @@ class ChartButton extends StatelessWidget {
     );
   }
 }
+// class AIInsightsTab extends StatelessWidget {
+//   final Map<String, String> aiAnalysis;
+//   final VoidCallback onRefresh;
+
+//   const AIInsightsTab({Key? key, required this.aiAnalysis, required this.onRefresh}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return CustomScrollView(
+//       slivers: [
+//         SliverPadding(
+//           padding: const EdgeInsets.all(16),
+//           sliver: SliverList(
+//             delegate: SliverChildListDelegate([
+//               const Text('AI Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//               const SizedBox(height: 16),
+//               ...['general', 'news', 'fundamental', 'team'].map(
+//                 (key) => AIInsightCard(title: _getTitleForKey(key), content: aiAnalysis[key] ?? ''),
+//               ),
+//               const SizedBox(height: 16),
+//               ElevatedButton(
+//                 onPressed: onRefresh,
+//                 child: const Text('Refresh AI Insights'),
+//               ),
+//             ]),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   String _getTitleForKey(String key) {
+//     switch (key) {
+//       case 'general': return 'General Analysis';
+//       case 'news': return 'Latest News';
+//       case 'fundamental': return 'Fundamental Analysis';
+//       case 'team': return 'Team Details';
+//       default: return 'Unknown';
+//     }
+//   }
+// }
 class AIInsightsTab extends StatelessWidget {
   final Map<String, String> aiAnalysis;
   final VoidCallback onRefresh;
 
-  const AIInsightsTab({Key? key, required this.aiAnalysis, required this.onRefresh}) : super(key: key);
+  const AIInsightsTab({
+    Key? key,
+    required this.aiAnalysis,
+    required this.onRefresh,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -6974,17 +7019,32 @@ class AIInsightsTab extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              const Text('AI Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 16),
-              ...['general', 'news', 'fundamental', 'team'].map(
-                (key) => AIInsightCard(title: _getTitleForKey(key), content: aiAnalysis[key] ?? ''),
+              const Text(
+                'AI Insights',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              ...['general', 'news', 'fundamental', 'team'].map(
+                (key) => AIInsightCard(
+                  title: _getTitleForKey(key),
+                  content: aiAnalysis[key] ?? '',
+                ),
+              ),
+              const SizedBox(height: 16),
+            ]),
+          ),
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
                 onPressed: onRefresh,
                 child: const Text('Refresh AI Insights'),
               ),
-            ]),
+            ),
           ),
         ),
       ],
@@ -6993,11 +7053,16 @@ class AIInsightsTab extends StatelessWidget {
 
   String _getTitleForKey(String key) {
     switch (key) {
-      case 'general': return 'General Analysis';
-      case 'news': return 'Latest News';
-      case 'fundamental': return 'Fundamental Analysis';
-      case 'team': return 'Team Details';
-      default: return 'Unknown';
+      case 'general':
+        return 'General Analysis';
+      case 'news':
+        return 'Latest News';
+      case 'fundamental':
+        return 'Fundamental Analysis';
+      case 'team':
+        return 'Team Details';
+      default:
+        return 'Unknown';
     }
   }
 }
