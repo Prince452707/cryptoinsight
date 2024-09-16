@@ -6960,47 +6960,6 @@ class ChartButton extends StatelessWidget {
     );
   }
 }
-// class AIInsightsTab extends StatelessWidget {
-//   final Map<String, String> aiAnalysis;
-//   final VoidCallback onRefresh;
-
-//   const AIInsightsTab({Key? key, required this.aiAnalysis, required this.onRefresh}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return CustomScrollView(
-//       slivers: [
-//         SliverPadding(
-//           padding: const EdgeInsets.all(16),
-//           sliver: SliverList(
-//             delegate: SliverChildListDelegate([
-//               const Text('AI Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//               const SizedBox(height: 16),
-//               ...['general', 'news', 'fundamental', 'team'].map(
-//                 (key) => AIInsightCard(title: _getTitleForKey(key), content: aiAnalysis[key] ?? ''),
-//               ),
-//               const SizedBox(height: 16),
-//               ElevatedButton(
-//                 onPressed: onRefresh,
-//                 child: const Text('Refresh AI Insights'),
-//               ),
-//             ]),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-
-//   String _getTitleForKey(String key) {
-//     switch (key) {
-//       case 'general': return 'General Analysis';
-//       case 'news': return 'Latest News';
-//       case 'fundamental': return 'Fundamental Analysis';
-//       case 'team': return 'Team Details';
-//       default: return 'Unknown';
-//     }
-//   }
-// }
 class AIInsightsTab extends StatelessWidget {
   final Map<String, String> aiAnalysis;
   final VoidCallback onRefresh;
@@ -7099,40 +7058,6 @@ class AIInsightCard extends StatelessWidget {
     );
   }
 }
-
-
-// class AIInsightCard extends StatelessWidget {
-//   final String title;
-//   final String content;
-
-//   const AIInsightCard({Key? key, required this.title, required this.content}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       elevation: 2,
-//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-//       margin: const EdgeInsets.only(bottom: 16),
-//       child: ExpansionTile(
-//         title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(16),
-//             child: MarkdownBody(
-//               data: content,
-//               styleSheet: MarkdownStyleSheet(
-//                 p: TextStyle(fontSize: 14),
-//                 h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//                 h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//                 h3: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 class AIQATab extends StatelessWidget {
   final String aiQuestion;
   final String aiAnswer;
@@ -7186,54 +7111,6 @@ class AIQATab extends StatelessWidget {
     );
   }
 }
-// class AIQATab extends StatelessWidget {
-//   final String aiQuestion;
-//   final String aiAnswer;
-//   final Function(String) onQuestionChanged;
-//   final VoidCallback onAskQuestion;
-
-//   const AIQATab({
-//     Key? key,
-//     required this.aiQuestion,
-//     required this.aiAnswer,
-//     required this.onQuestionChanged,
-//     required this.onAskQuestion,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       padding: const EdgeInsets.all(16),
-//       children: [
-//         const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 16),
-//         TextField(
-//           onChanged: onQuestionChanged,
-//           decoration: InputDecoration(
-//             hintText: 'Enter your question here',
-//             suffixIcon: IconButton(
-//               icon: const Icon(Icons.send),
-//               onPressed: onAskQuestion,
-//             ),
-//           ),
-//         ),
-//         const SizedBox(height: 16),
-//         const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 8),
-//         MarkdownBody(
-//           data: aiAnswer,
-//           styleSheet: MarkdownStyleSheet(
-//             p: TextStyle(fontSize: 14),
-//             h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//             h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//             h3: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class DetailsTab extends StatelessWidget {
   final Map<String, dynamic> details;
 
