@@ -5597,7 +5597,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+      create: (context) => ThemeProvider(
+      
+      ),
       child: CryptoExchangeApp(),
     ),
   );
