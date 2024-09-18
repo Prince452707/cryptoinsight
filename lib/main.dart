@@ -5576,7 +5576,32 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import 'package:flutter_markdown/flutter_markdown.dart';
+
 import 'similar_coins.dart';
 import 'dart:math';
 import 'package:shimmer/shimmer.dart';
@@ -5597,9 +5622,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ThemeProvider(
-      
-      ),
+      create: (context) => ThemeProvider(),
       child: CryptoExchangeApp(),
     ),
   );
@@ -6162,6 +6185,81 @@ class ThrottleService {
   }
 }
 
+// class AIService {
+//   static const String apiKey = 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y';
+//   static final model = GenerativeModel(
+//     model: 'gemini-pro',
+//     apiKey: apiKey,
+//   );
+
+//   static Future<String> generateAIResponse(String prompt) async {
+//     try {
+//       final content = [Content.text(prompt)];
+//       final response = await model.generateContent(content);
+//       if (response.text != null && response.text!.isNotEmpty) {
+//         return response.text!;
+//       } else {
+//         return 'No response generated';
+//       }
+//     } catch (e) {
+//       return 'Error generating response: $e';
+//     }
+//   }
+
+//   static Future<Map<String, String>> generateComprehensiveAnalysis(Cryptocurrency crypto) async {
+//     Map<String, String> analysis = {};
+//     String currentDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+//     analysis['general'] = await generateAIResponse(
+//       "Provide a comprehensive general analysis of ${crypto.name} (${crypto.symbol}) in the cryptocurrency market as of $currentDate. Include:\n"
+//       "1. Current price: \$${crypto.price.toStringAsFixed(2)} - compare this to 7-day and 30-day averages\n"
+//       "2. Market cap: \$${crypto.marketCap.toStringAsFixed(2)} - discuss its rank and recent changes\n"
+//       "3. 24-hour trading volume and how it compares to the 7-day average\n"
+//       "4. Recent performance: 24h, 7d, and 30d price changes (in percentages)\n"
+//       "5. Current market dominance and comparison to major cryptocurrencies\n"
+//       "6. Brief overview of on-chain metrics (e.g., active addresses, transaction count) if applicable\n"
+//       "7. General market sentiment towards ${crypto.name} based on recent events\n"
+//       "Provide specific numbers and percentages where possible, and focus on data from the last 30 days."
+//     );
+
+//     analysis['news'] = await generateAIResponse(
+//       "Summarize the most recent news and developments for ${crypto.name} (${crypto.symbol}) as of $currentDate. Include:\n"
+//       "1. Major announcements or events from the past 7 days, with exact dates\n"
+//       "2. Any significant partnerships or collaborations revealed in the last 30 days\n"
+//       "3. Recent protocol upgrades or technological advancements, specifying implementation dates\n"
+//       "4. Regulatory news or legal developments affecting ${crypto.name} in the past month\n"
+//       "5. Notable mentions of ${crypto.name} by industry leaders or influential figures (quote if possible)\n"
+//       "6. Upcoming events in the next 14 days that could impact ${crypto.name}'s value\n"
+//       "7. Any changes in ${crypto.name}'s ecosystem (e.g., DeFi, NFTs) in the last 30 days\n"
+//       "8. Comparison of recent news to its main competitors\n"
+//       "Prioritize the most impactful and recent news items. For each point, provide the date of occurrence or announcement."
+//     );
+
+//     analysis['fundamental'] = await generateAIResponse(
+//       "Analyze the current fundamental aspects of ${crypto.name} (${crypto.symbol}) as of $currentDate. Cover:\n"
+//       "1. Latest technological updates or changes to the protocol\n"
+//       "2. Most recent partnerships or adoption metrics\n"
+//       "3. Upcoming events or releases in the next 30 days\n"
+//       "4. Current market sentiment and social media buzz\n"
+//       "5. Any recent regulatory news affecting ${crypto.name}\n"
+//       "Prioritize information from the last 30 days and specify dates for any mentioned events or updates."
+//     );
+
+//     analysis['team'] = await generateAIResponse(
+//       "Deliver a comprehensive report on the current team behind ${crypto.name} (${crypto.symbol}) as of $currentDate. Include:\n"
+//       "1. Detailed profiles of key team members (at least 5), including their roles, professional backgrounds, and notable achievements\n"
+//       "2. Recent changes in leadership or significant hires in the last 6 months\n"
+//       "3. Team's latest public appearances, interviews, or statements (provide dates)\n"
+//       "4. Ongoing projects or initiatives led by specific team members\n"
+//       "5. Any controversies or praised actions involving team members in the last year\n"
+//       "6. Assessment of the team's transparency and communication with the community\n"
+//       "7. Comparison of the team's expertise with that of competitor projects\n"
+//       "Provide specific dates for any mentioned events or changes and focus on the most recent information available."
+//     );
+
+//     return analysis;
+//   }
+// }
 class AIService {
   static const String apiKey = 'AIzaSyALPelkD_VVKoYNVzk1XuKadvpDayOQw1Y';
   static final model = GenerativeModel(
@@ -6265,6 +6363,7 @@ class AIService {
     return analysis;
   }
 }
+
 
 class ApiService {
   static const List<String> baseUrls = [
@@ -6370,6 +6469,428 @@ class ApiService {
     return List<List<dynamic>>.from(data['prices']);
   }
 }
+
+// class CryptocurrencyDetailScreen extends StatefulWidget {
+//   final Cryptocurrency cryptocurrency;
+
+//   const CryptocurrencyDetailScreen({Key? key, required this.cryptocurrency}) : super(key: key);
+
+//   @override
+//   _CryptocurrencyDetailScreenState createState() => _CryptocurrencyDetailScreenState();
+// }
+
+// class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen> with SingleTickerProviderStateMixin {
+//   late TabController _tabController;
+//   late ScrollController _scrollController;
+  
+//   Map<String, dynamic> details = {};
+//   bool isLoading = true;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _tabController = TabController(length: 5, vsync: this);
+//     _scrollController = ScrollController();
+//     fetchDetails();
+//   }
+
+//   @override
+//   void dispose() {
+//     _tabController.dispose();
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
+
+//   Future<void> fetchDetails() async {
+//     setState(() => isLoading = true);
+//     try {
+//       final fetchedDetails = await ApiService.getCryptocurrencyDetails(widget.cryptocurrency.id);
+//       setState(() {
+//         details = fetchedDetails;
+//         isLoading = false;
+//       });
+//     } catch (e) {
+//       setState(() => isLoading = false);
+//       _showErrorSnackbar('Failed to fetch cryptocurrency details');
+//     }
+//   }
+
+//   void _showErrorSnackbar(String message) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(
+//         content: Text(message),
+//         backgroundColor: Colors.red,
+//         behavior: SnackBarBehavior.floating,
+//       ),
+//     );
+//   }
+
+//   void showSimilarCryptocurrencies(BuildContext context) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => SimilarCryptocurrenciesScreen(cryptocurrency: widget.cryptocurrency),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: NestedScrollView(
+//         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+//           return [
+//             SliverAppBar(
+//               expandedHeight: 200.0,
+//               floating: false,
+//               pinned: true,
+//               flexibleSpace: FlexibleSpaceBar(
+//                 title: Text(widget.cryptocurrency.name,
+//                   style: const TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold,
+//                     shadows: [Shadow(blurRadius: 2.0, color: Colors.black45, offset: Offset(1.0, 1.0))],
+//                   ),
+//                 ),
+//                 background: Stack(
+//                   fit: StackFit.expand,
+//                   children: [
+//                     Hero(
+//                       tag: 'crypto-${widget.cryptocurrency.id}',
+//                       child: CachedNetworkImage(
+//                         imageUrl: widget.cryptocurrency.image,
+//                         fit: BoxFit.cover,
+//                         color: Colors.black.withOpacity(0.5),
+//                         colorBlendMode: BlendMode.darken,
+//                       ),
+//                     ),
+//                     Positioned(
+//                       bottom: 60,
+//                       left: 16,
+//                       child: CircleAvatar(
+//                         backgroundImage: CachedNetworkImageProvider(widget.cryptocurrency.image),
+//                         radius: 30,
+//                         backgroundColor: Colors.white,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               actions: [
+//                 IconButton(
+//                   icon: const Icon(Icons.refresh),
+//                   onPressed: fetchDetails,
+//                 ),
+//               ],
+//             ),
+//           ];
+//         },
+//         body: isLoading
+//             ? _buildLoadingScreen()
+//             : Column(
+//                 children: [
+//                   _buildPriceHeader(),
+//                   TabBar(
+//                     controller: _tabController,
+//                     labelColor: Theme.of(context).primaryColor,
+//                     unselectedLabelColor: Colors.grey,
+//                     indicatorColor: Theme.of(context).primaryColor,
+//                     isScrollable: true,
+//                     tabs: const [
+//                       Tab(text: 'Overview'),
+//                       Tab(text: 'Chart'),
+//                       Tab(text: 'AI Insights'),
+//                       Tab(text: 'AI Q&A'),
+//                       Tab(text: 'Details'),
+//                     ],
+//                   ),
+//                   Expanded(
+//                     child: TabBarView(
+//                       controller: _tabController,
+//                       children: [
+//                         CryptocurrencyOverviewTab(cryptocurrency: widget.cryptocurrency, details: details),
+//                         CryptocurrencyChartTab(cryptocurrency: widget.cryptocurrency),
+//                         CryptocurrencyAIInsightsTab(cryptocurrency: widget.cryptocurrency),
+//                         CryptocurrencyAIQATab(cryptocurrency: widget.cryptocurrency),
+//                         CryptocurrencyDetailsTab(cryptocurrency: widget.cryptocurrency, details: details),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//       ),
+//       floatingActionButton: FloatingActionButton.extended(
+//         onPressed: () => showSimilarCryptocurrencies(context),
+//         label: const Text('Similar Cryptocurrencies'),
+//         icon: const Icon(Icons.compare_arrows),
+//       ),
+//     );
+//   }
+
+//   Widget _buildLoadingScreen() {
+//     return Shimmer.fromColors(
+//       baseColor: Colors.grey[300]!,
+//       highlightColor: Colors.grey[100]!,
+//       child: ListView.builder(
+//         itemCount: 10,
+//         itemBuilder: (context, index) => Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Container(
+//             height: 80,
+//             color: Colors.white,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildPriceHeader() {
+//     return Container(
+//       padding: const EdgeInsets.all(16),
+//       color: Theme.of(context).cardColor,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Text(
+//                 '\$${NumberFormat("#,##0.00").format(widget.cryptocurrency.price)}',
+//                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//               ),
+//               Text(
+//                 widget.cryptocurrency.symbol.toUpperCase(),
+//                 style: const TextStyle(fontSize: 16, color: Colors.grey),
+//               ),
+//             ],
+//           ),
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//             decoration: BoxDecoration(
+//               color: widget.cryptocurrency.percentChange24h >= 0 ? Colors.green : Colors.red,
+//               borderRadius: BorderRadius.circular(4),
+//             ),
+//             child: Text(
+//               '${widget.cryptocurrency.percentChange24h.toStringAsFixed(2)}%',
+//               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+// class CryptocurrencyDetailScreen extends StatefulWidget {
+//   final Cryptocurrency cryptocurrency;
+
+//   const CryptocurrencyDetailScreen({Key? key, required this.cryptocurrency}) : super(key: key);
+
+//   @override
+//   _CryptocurrencyDetailScreenState createState() => _CryptocurrencyDetailScreenState();
+// }
+
+// class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen> with SingleTickerProviderStateMixin {
+//   late TabController _tabController;
+//   late ScrollController _scrollController;
+  
+//   Map<String, dynamic> details = {};
+//   bool isLoading = true;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _tabController = TabController(length: 5, vsync: this);
+//     _scrollController = ScrollController();
+//     fetchDetails();
+//   }
+
+//   @override
+//   void dispose() {
+//     _tabController.dispose();
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
+
+//   Future<void> fetchDetails() async {
+//     setState(() => isLoading = true);
+//     try {
+//       final fetchedDetails = await ApiService.getCryptocurrencyDetails(widget.cryptocurrency.id);
+//       setState(() {
+//         details = fetchedDetails;
+//         isLoading = false;
+//       });
+//     } catch (e) {
+//       setState(() => isLoading = false);
+//       _showErrorSnackbar('Failed to fetch cryptocurrency details');
+//     }
+//   }
+
+//   void _showErrorSnackbar(String message) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(
+//         content: Text(message),
+//         backgroundColor: Colors.red,
+//         behavior: SnackBarBehavior.floating,
+//       ),
+//     );
+//   }
+
+//   void showSimilarCryptocurrencies(BuildContext context) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => SimilarCryptocurrenciesScreen(cryptocurrency: widget.cryptocurrency),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: NestedScrollView(
+//         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+//           return [
+//             SliverAppBar(
+//               expandedHeight: 200.0,
+//               floating: false,
+//               pinned: true,
+//               flexibleSpace: FlexibleSpaceBar(
+//                 title: Text(widget.cryptocurrency.name,
+//                   style: const TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold,
+//                     shadows: [Shadow(blurRadius: 2.0, color: Colors.black45, offset: Offset(1.0, 1.0))],
+//                   ),
+//                 ),
+//                 background: Stack(
+//                   fit: StackFit.expand,
+//                   children: [
+//                     Hero(
+//                       tag: 'crypto-${widget.cryptocurrency.id}',
+//                       child: CachedNetworkImage(
+//                         imageUrl: widget.cryptocurrency.image,
+//                         fit: BoxFit.cover,
+//                         color: Colors.black.withOpacity(0.5),
+//                         colorBlendMode: BlendMode.darken,
+//                       ),
+//                     ),
+//                     Positioned(
+//                       bottom: 60,
+//                       left: 16,
+//                       child: CircleAvatar(
+//                         backgroundImage: CachedNetworkImageProvider(widget.cryptocurrency.image),
+//                         radius: 30,
+//                         backgroundColor: Colors.white,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               actions: [
+//                 IconButton(
+//                   icon: const Icon(Icons.refresh),
+//                   onPressed: fetchDetails,
+//                 ),
+//               ],
+//             ),
+//           ];
+//         },
+//         body: isLoading
+//             ? _buildLoadingScreen()
+//             : Column(
+//                 children: [
+//                   _buildPriceHeader(),
+//                   TabBar(
+//                     controller: _tabController,
+//                     labelColor: Theme.of(context).primaryColor,
+//                     unselectedLabelColor: Colors.grey,
+//                     indicatorColor: Theme.of(context).primaryColor,
+//                     isScrollable: true,
+//                     tabs: const [
+//                       Tab(text: 'Overview'),
+//                       Tab(text: 'Chart'),
+//                       Tab(text: 'AI Insights'),
+//                       Tab(text: 'AI Q&A'),
+//                       Tab(text: 'Details'),
+//                     ],
+//                   ),
+//                   Expanded(
+//                     child: TabBarView(
+//                       controller: _tabController,
+//                       children: [
+//                         CryptocurrencyOverviewTab(cryptocurrency: widget.cryptocurrency, details: details),
+//                         CryptocurrencyChartTab(cryptocurrency: widget.cryptocurrency),
+//                         CryptocurrencyAIInsightsTab(cryptocurrency: widget.cryptocurrency),
+//                         CryptocurrencyAIQATab(cryptocurrency: widget.cryptocurrency),
+//                         CryptocurrencyDetailsTab(cryptocurrency: widget.cryptocurrency, details: details),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//       ),
+//       floatingActionButton: FloatingActionButton.extended(
+//         onPressed: () => showSimilarCryptocurrencies(context),
+//         label: const Text('Similar Cryptocurrencies'),
+//         icon: const Icon(Icons.compare_arrows),
+//       ),
+//     );
+//   }
+
+//   Widget _buildLoadingScreen() {
+//     return Shimmer.fromColors(
+//       baseColor: Colors.grey[300]!,
+//       highlightColor: Colors.grey[100]!,
+//       child: ListView.builder(
+//         itemCount: 10,
+//         itemBuilder: (context, index) => Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Container(
+//             height: 80,
+//             color: Colors.white,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildPriceHeader() {
+//     return Container(
+//       padding: const EdgeInsets.all(16),
+//       color: Theme.of(context).cardColor,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Text(
+//                 '\$${NumberFormat("#,##0.00").format(widget.cryptocurrency.price)}',
+//                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//               ),
+//               Text(
+//                 widget.cryptocurrency.symbol.toUpperCase(),
+//                 style: const TextStyle(fontSize: 16, color: Colors.grey),
+//               ),
+//             ],
+//           ),
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//             decoration: BoxDecoration(
+//               color: widget.cryptocurrency.percentChange24h >= 0 ? Colors.green : Colors.red,
+//               borderRadius: BorderRadius.circular(4),
+//             ),
+//             child: Text(
+//               '${widget.cryptocurrency.percentChange24h.toStringAsFixed(2)}%',
+//               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 class CryptocurrencyDetailScreen extends StatefulWidget {
   final Cryptocurrency cryptocurrency;
 
@@ -6385,17 +6906,6 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
   
   Map<String, dynamic> details = {};
   bool isLoading = true;
-  bool isChartLoading = true;
-  List<FlSpot> priceData = [];
-  int selectedChartDays = 7;
-  Map<String, String> aiAnalysis = {
-    'general': 'Loading...',
-    'news': 'Loading...',
-    'fundamental': 'Loading...',
-    'team': 'Loading...',
-  };
-  String aiQuestion = '';
-  String aiAnswer = '';
 
   @override
   void initState() {
@@ -6403,7 +6913,6 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
     _tabController = TabController(length: 5, vsync: this);
     _scrollController = ScrollController();
     fetchDetails();
-    fetchComprehensiveAnalysis();
   }
 
   @override
@@ -6421,48 +6930,9 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
         details = fetchedDetails;
         isLoading = false;
       });
-      fetchMarketChart();
     } catch (e) {
       setState(() => isLoading = false);
       _showErrorSnackbar('Failed to fetch cryptocurrency details');
-    }
-  }
-
-  Future<void> fetchMarketChart() async {
-    setState(() => isChartLoading = true);
-    try {
-      final chartData = await ApiService.getMarketChart(widget.cryptocurrency.id, selectedChartDays);
-      setState(() {
-        priceData = chartData.map((point) => FlSpot(point[0].toDouble(), point[1].toDouble())).toList();
-        isChartLoading = false;
-      });
-    } catch (e) {
-      setState(() => isChartLoading = false);
-      _showErrorSnackbar('Failed to fetch market chart data');
-    }
-  }
-
-  Future<void> fetchComprehensiveAnalysis() async {
-    try {
-      final analysis = await AIService.generateComprehensiveAnalysis(widget.cryptocurrency);
-      setState(() {
-        aiAnalysis = analysis;
-      });
-    } catch (e) {
-      _showErrorSnackbar('Failed to fetch AI analysis');
-    }
-  }
-
-  Future<void> askAIQuestion() async {
-    if (aiQuestion.isEmpty) return;
-    setState(() => aiAnswer = 'Loading...');
-    try {
-      final answer = await AIService.generateAIResponse(
-        "Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}: $aiQuestion"
-      );
-      setState(() => aiAnswer = answer);
-    } catch (e) {
-      setState(() => aiAnswer = 'Failed to get AI response');
     }
   }
 
@@ -6491,132 +6961,94 @@ class _CryptocurrencyDetailScreenState extends State<CryptocurrencyDetailScreen>
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            CryptoDetailAppBar(cryptocurrency: widget.cryptocurrency, onRefresh: fetchDetails),
-          ];
-        },
-        body: Padding(
-          padding: EdgeInsets.only(bottom: 80),
-          child: isLoading
-              ? LoadingScreen()
-              : Column(
+            SliverAppBar(
+              expandedHeight: 200.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(widget.cryptocurrency.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    shadows: [Shadow(blurRadius: 2.0, color: Colors.black45, offset: Offset(1.0, 1.0))],
+                  ),
+                ),
+                background: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    PriceHeader(cryptocurrency: widget.cryptocurrency),
-                    TabBar(
-                      controller: _tabController,
-                      labelColor: Theme.of(context).primaryColor,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Theme.of(context).primaryColor,
-                      isScrollable: true,
-                      tabs: const [
-                        Tab(text: 'Overview'),
-                        Tab(text: 'Chart'),
-                        Tab(text: 'AI Insights'),
-                        Tab(text: 'AI Q&A'),
-                        Tab(text: 'Details'),
-                      ],
+                    Hero(
+                      tag: 'crypto-${widget.cryptocurrency.id}',
+                      child: CachedNetworkImage(
+                        imageUrl: widget.cryptocurrency.image,
+                        fit: BoxFit.cover,
+                        color: Colors.black.withOpacity(0.5),
+                        colorBlendMode: BlendMode.darken,
+                      ),
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          OverviewTab(details: details),
-                          ChartTab(
-                            isChartLoading: isChartLoading,
-                            priceData: priceData,
-                            selectedChartDays: selectedChartDays,
-                            onChartDaysChanged: (days) {
-                              setState(() => selectedChartDays = days);
-                              fetchMarketChart();
-                            },
-                            cryptocurrency: widget.cryptocurrency,
-                          ),
-                          AIInsightsTab(
-                            aiAnalysis: aiAnalysis,
-                            onRefresh: fetchComprehensiveAnalysis,
-                          ),
-                          AIQATab(
-                            aiQuestion: aiQuestion,
-                            aiAnswer: aiAnswer,
-                            onQuestionChanged: (value) => setState(() => aiQuestion = value),
-                            onAskQuestion: askAIQuestion,
-                          ),
-                          DetailsTab(details: details),
-                        ],
+                    Positioned(
+                      bottom: 60,
+                      left: 16,
+                      child: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(widget.cryptocurrency.image),
+                        radius: 30,
+                        backgroundColor: Colors.white,
                       ),
                     ),
                   ],
                 ),
-        ),
-      ),
-      bottomSheet: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        child: ElevatedButton(
-          onPressed: () => showSimilarCryptocurrencies(context),
-          child: const Text('Similar Cryptocurrencies'),
-        ),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: fetchDetails,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.compare_arrows),
+                  onPressed: () => showSimilarCryptocurrencies(context),
+                  tooltip: 'Similar Cryptocurrencies',
+                ),
+              ],
+            ),
+          ];
+        },
+        body: isLoading
+            ? _buildLoadingScreen()
+            : Column(
+                children: [
+                  _buildPriceHeader(),
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: Theme.of(context).primaryColor,
+                    unselectedLabelColor: Colors.grey,
+                    indicatorColor: Theme.of(context).primaryColor,
+                    isScrollable: true,
+                    tabs: const [
+                      Tab(text: 'Overview'),
+                      Tab(text: 'Chart'),
+                      Tab(text: 'AI Insights'),
+                      Tab(text: 'AI Q&A'),
+                      Tab(text: 'Details'),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        CryptocurrencyOverviewTab(cryptocurrency: widget.cryptocurrency, details: details),
+                        CryptocurrencyChartTab(cryptocurrency: widget.cryptocurrency),
+                        CryptocurrencyAIInsightsTab(cryptocurrency: widget.cryptocurrency),
+                        CryptocurrencyAIQATab(cryptocurrency: widget.cryptocurrency),
+                        CryptocurrencyDetailsTab(cryptocurrency: widget.cryptocurrency, details: details),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
-}
 
-class CryptoDetailAppBar extends StatelessWidget {
-  final Cryptocurrency cryptocurrency;
-  final VoidCallback onRefresh;
-
-  const CryptoDetailAppBar({Key? key, required this.cryptocurrency, required this.onRefresh}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: 200.0,
-      floating: false,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Text(cryptocurrency.name,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            shadows: [Shadow(blurRadius: 2.0, color: Colors.black45, offset: Offset(1.0, 1.0))],
-          ),
-        ),
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            Hero(
-              tag: 'crypto-${cryptocurrency.id}',
-              child: CachedNetworkImage(
-                imageUrl: cryptocurrency.image,
-                fit: BoxFit.cover,
-                color: Colors.black.withOpacity(0.5),
-                colorBlendMode: BlendMode.darken,
-              ),
-            ),
-            Positioned(
-              bottom: 60,
-              left: 16,
-              child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(cryptocurrency.image),
-                radius: 30,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.refresh),
-          onPressed: onRefresh,
-        ),
-      ],
-    );
-  }
-}
-
-class LoadingScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLoadingScreen() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -6632,15 +7064,8 @@ class LoadingScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class PriceHeader extends StatelessWidget {
-  final Cryptocurrency cryptocurrency;
-
-  const PriceHeader({Key? key, required this.cryptocurrency}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildPriceHeader() {
     return Container(
       padding: const EdgeInsets.all(16),
       color: Theme.of(context).cardColor,
@@ -6651,11 +7076,11 @@ class PriceHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '\$${NumberFormat("#,##0.00").format(cryptocurrency.price)}',
+                '\$${NumberFormat("#,##0.00").format(widget.cryptocurrency.price)}',
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Text(
-                cryptocurrency.symbol.toUpperCase(),
+                widget.cryptocurrency.symbol.toUpperCase(),
                 style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ],
@@ -6663,11 +7088,11 @@ class PriceHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: cryptocurrency.percentChange24h >= 0 ? Colors.green : Colors.red,
+              color: widget.cryptocurrency.percentChange24h >= 0 ? Colors.green : Colors.red,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
-              '${cryptocurrency.percentChange24h.toStringAsFixed(2)}%',
+              '${widget.cryptocurrency.percentChange24h.toStringAsFixed(2)}%',
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
@@ -6676,34 +7101,27 @@ class PriceHeader extends StatelessWidget {
     );
   }
 }
-
-class OverviewTab extends StatelessWidget {
+class CryptocurrencyOverviewTab extends StatelessWidget {
+  final Cryptocurrency cryptocurrency;
   final Map<String, dynamic> details;
 
-  const OverviewTab({Key? key, required this.details}) : super(key: key);
+  const CryptocurrencyOverviewTab({Key? key, required this.cryptocurrency, required this.details}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        KeyStatistics(details: details),
+        _buildKeyStatistics(),
         const SizedBox(height: 16),
-        Description(description: details['description']?['en'] ?? 'No description available.'),
+        _buildDescription(),
         const SizedBox(height: 16),
-        Links(links: details['links'] ?? {}),
+        _buildLinks(),
       ],
     );
   }
-}
 
-class KeyStatistics extends StatelessWidget {
-  final Map<String, dynamic> details;
-
-  const KeyStatistics({Key? key, required this.details}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildKeyStatistics() {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -6714,28 +7132,20 @@ class KeyStatistics extends StatelessWidget {
           children: [
             const Text('Key Statistics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            StatItem(label: 'Market Cap', value: '\$${NumberFormat("#,##0.00").format(details['market_cap']?['usd'] ?? 0)}'),
-            StatItem(label: '24h Volume', value: '\$${NumberFormat("#,##0.00").format(details['total_volume']?['usd'] ?? 0)}'),
-            StatItem(label: 'Circulating Supply', value: '${NumberFormat("#,##0.00").format(details['circulating_supply'] ?? 0)} ${details['symbol']?.toUpperCase() ?? ''}'),
-            if (details['total_supply'] != null)
-              StatItem(label: 'Total Supply', value: '${NumberFormat("#,##0.00").format(details['total_supply'])} ${details['symbol']?.toUpperCase() ?? ''}'),
-            if (details['max_supply'] != null)
-              StatItem(label: 'Max Supply', value: '${NumberFormat("#,##0.00").format(details['max_supply'])} ${details['symbol']?.toUpperCase() ?? ''}'),
+            _buildStatItem('Market Cap', '\$${NumberFormat("#,##0.00").format(cryptocurrency.marketCap)}'),
+            _buildStatItem('24h Volume', '\$${NumberFormat("#,##0.00").format(cryptocurrency.volume24h)}'),
+            _buildStatItem('Circulating Supply', '${NumberFormat("#,##0.00").format(cryptocurrency.circulatingSupply)} ${cryptocurrency.symbol.toUpperCase()}'),
+            if (cryptocurrency.totalSupply != null)
+              _buildStatItem('Total Supply', '${NumberFormat("#,##0.00").format(cryptocurrency.totalSupply)} ${cryptocurrency.symbol.toUpperCase()}'),
+            if (cryptocurrency.maxSupply != null)
+              _buildStatItem('Max Supply', '${NumberFormat("#,##0.00").format(cryptocurrency.maxSupply)} ${cryptocurrency.symbol.toUpperCase()}'),
           ],
         ),
       ),
     );
   }
-}
 
-class StatItem extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const StatItem({Key? key, required this.label, required this.value}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildStatItem(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -6747,15 +7157,8 @@ class StatItem extends StatelessWidget {
       ),
     );
   }
-}
 
-class Description extends StatelessWidget {
-  final String description;
-
-  const Description({Key? key, required this.description}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildDescription() {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -6766,21 +7169,14 @@ class Description extends StatelessWidget {
           children: [
             const Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            Text(description),
+            Text(details['description']?['en'] ?? 'No description available.'),
           ],
         ),
       ),
     );
   }
-}
 
-class Links extends StatelessWidget {
-  final Map<String, dynamic> links;
-
-  const Links({Key? key, required this.links}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLinks() {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -6791,70 +7187,77 @@ class Links extends StatelessWidget {
           children: [
             const Text('Links', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            if (links['homepage'] != null)
-              LinkItem(label: 'Website', url: links['homepage'][0]),
-            if (links['blockchain_site'] != null)
-              LinkItem(label: 'Blockchain Explorer', url: links['blockchain_site'][0]),
-            if (links['repos_url']?['github']?.isNotEmpty ?? false)
-              LinkItem(label: 'GitHub', url: links['repos_url']['github'][0]),
-            LinkItem(label: 'Twitter', url: 'https://twitter.com/${links['twitter_screen_name']}'),
-            if (links['facebook_username'] != null)
-              LinkItem(label: 'Facebook', url: 'https://facebook.com/${links['facebook_username']}'),
-            if (links['subreddit_url'] != null)
-              LinkItem(label: 'Reddit', url: links['subreddit_url']),
+            if (details['links']?['homepage'] != null)
+              _buildLinkItem('Website', details['links']['homepage'][0]),
+            if (details['links']?['blockchain_site'] != null)
+              _buildLinkItem('Blockchain Explorer', details['links']['blockchain_site'][0]),
+            if (details['links']?['repos_url']?['github']?.isNotEmpty ?? false)
+              _buildLinkItem('GitHub', details['links']['repos_url']['github'][0]),
+            if (details['links']?['twitter_screen_name'] != null)
+              _buildLinkItem('Twitter', 'https://twitter.com/${details['links']['twitter_screen_name']}'),
+            if (details['links']?['facebook_username'] != null)
+              _buildLinkItem('Facebook', 'https://facebook.com/${details['links']['facebook_username']}'),
+            if (details['links']?['subreddit_url'] != null)
+              _buildLinkItem('Reddit', details['links']['subreddit_url']),
           ],
         ),
       ),
     );
   }
-}
 
-class LinkItem extends StatelessWidget {
-  final String label;
-  final String url;
-
-  const LinkItem({Key? key, required this.label, required this.url}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLinkItem(String label, String url) {
     return ListTile(
       title: Text(label),
       trailing: const Icon(Icons.open_in_new),
-      onTap: () => _launchURL(url, context),
+      onTap: () => _launchURL(url),
     );
   }
 
-  void _launchURL(String url, BuildContext context) async {
+  void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Could not launch $url'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      print('Could not launch $url');
     }
   }
 }
 
-class ChartTab extends StatelessWidget {
-  final bool isChartLoading;
-  final List<FlSpot> priceData;
-  final int selectedChartDays;
-  final Function(int) onChartDaysChanged;
+class CryptocurrencyChartTab extends StatefulWidget {
   final Cryptocurrency cryptocurrency;
 
-  const ChartTab({
-    Key? key,
-    required this.isChartLoading,
-    required this.priceData,
-    required this.selectedChartDays,
-    required this.onChartDaysChanged,
-    required this.cryptocurrency,
-  }) : super(key: key);
+  const CryptocurrencyChartTab({Key? key, required this.cryptocurrency}) : super(key: key);
+
+  @override
+  _CryptocurrencyChartTabState createState() => _CryptocurrencyChartTabState();
+}
+
+class _CryptocurrencyChartTabState extends State<CryptocurrencyChartTab> {
+  bool isChartLoading = true;
+  List<FlSpot> priceData = [];
+  int selectedChartDays = 7;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMarketChart();
+  }
+
+  Future<void> fetchMarketChart() async {
+    setState(() => isChartLoading = true);
+    try {
+      final chartData = await ApiService.getMarketChart(widget.cryptocurrency.id, selectedChartDays);
+      setState(() {
+        priceData = chartData.map((point) => FlSpot(point[0].toDouble(), point[1].toDouble())).toList();
+        isChartLoading = false;
+      });
+    } catch (e) {
+      setState(() => isChartLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch market chart data')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -6865,10 +7268,10 @@ class ChartTab extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ChartButton(label: '7D', days: 7, selectedDays: selectedChartDays, onPressed: onChartDaysChanged),
-              ChartButton(label: '30D', days: 30, selectedDays: selectedChartDays, onPressed: onChartDaysChanged),
-              ChartButton(label: '90D', days: 90, selectedDays: selectedChartDays, onPressed: onChartDaysChanged),
-              ChartButton(label: '1Y', days: 365, selectedDays: selectedChartDays, onPressed: onChartDaysChanged),
+              _buildChartButton('7D', 7),
+              _buildChartButton('30D', 30),
+              _buildChartButton('90D', 90),
+              _buildChartButton('1Y', 365),
             ],
           ),
         ),
@@ -6918,6 +7321,23 @@ class ChartTab extends StatelessWidget {
                           },
                         ),
                         handleBuiltInTouches: true,
+                        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+                          return spotIndexes.map((spotIndex) {
+                            return TouchedSpotIndicatorData(
+                              FlLine(color: Colors.blue, strokeWidth: 2),
+                              FlDotData(
+                                getDotPainter: (spot, percent, barData, index) {
+                                  return FlDotCirclePainter(
+                                    radius: 6,
+                                    color: Colors.white,
+                                    strokeWidth: 3,
+                                    strokeColor: Colors.blue,
+                                  );
+                                },
+                              ),
+                            );
+                          }).toList();
+                        },
                       ),
                     ),
                   ),
@@ -6926,116 +7346,178 @@ class ChartTab extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            'Price: \$${NumberFormat("#,##0.00").format(cryptocurrency.price)}',
+            'Price: \$${NumberFormat("#,##0.00").format(widget.cryptocurrency.price)}',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
       ],
     );
   }
-}
 
-class ChartButton extends StatelessWidget {
-  final String label;
-  final int days;
-  final int selectedDays;
-  final Function(int) onPressed;
-
-  const ChartButton({
-    Key? key,
-    required this.label,
-    required this.days,
-    required this.selectedDays,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildChartButton(String label, int days) {
     return ElevatedButton(
-      onPressed: () => onPressed(days),
+      onPressed: () {
+        setState(() => selectedChartDays = days);
+        fetchMarketChart();
+      },
       style: ElevatedButton.styleFrom(
-        backgroundColor: selectedDays == days ? Theme.of(context).primaryColor : Colors.grey.shade200,
-        foregroundColor: selectedDays == days ? Colors.white : Colors.black,
+        backgroundColor: selectedChartDays == days ? Theme.of(context).primaryColor : Colors.grey.shade200,
+        foregroundColor: selectedChartDays == days ? Colors.white : Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       child: Text(label),
     );
   }
 }
-class AIInsightsTab extends StatelessWidget {
-  final Map<String, String> aiAnalysis;
-  final VoidCallback onRefresh;
 
-  const AIInsightsTab({
-    Key? key,
-    required this.aiAnalysis,
-    required this.onRefresh,
-  }) : super(key: key);
+// class CryptocurrencyAIInsightsTab extends StatefulWidget {
+//   final Cryptocurrency cryptocurrency;
+
+//   const CryptocurrencyAIInsightsTab({Key? key, required this.cryptocurrency}) : super(key: key);
+
+//   @override
+//   _CryptocurrencyAIInsightsTabState createState() => _CryptocurrencyAIInsightsTabState();
+// }
+
+// class _CryptocurrencyAIInsightsTabState extends State<CryptocurrencyAIInsightsTab> {
+//   Map<String, String> aiAnalysis = {
+//     'general': 'Loading...',
+//     'news': 'Loading...',
+//     'fundamental': 'Loading...',
+//     'team': 'Loading...',
+//   };
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchComprehensiveAnalysis();
+//   }
+
+//   Future<void> fetchComprehensiveAnalysis() async {
+//     try {
+//       final analysis = await AIService.generateComprehensiveAnalysis(widget.cryptocurrency);
+//       setState(() {
+//         aiAnalysis = analysis;
+//       });
+//     } catch (e) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text('Failed to fetch AI analysis')),
+//       );
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView(
+//       padding: const EdgeInsets.all(16),
+//       children: [
+//         _buildAIInsights(),
+//       ],
+//     );
+//   }
+
+//   Widget _buildAIInsights() {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         const Text('AI Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//         const SizedBox(height: 16),
+//         _buildAIInsightCard('General Analysis', aiAnalysis['general']!),
+//         _buildAIInsightCard('Latest News', aiAnalysis['news']!),
+//         _buildAIInsightCard('Fundamental Analysis', aiAnalysis['fundamental']!),
+//         _buildAIInsightCard('Team Details', aiAnalysis['team']!),
+//         const SizedBox(height: 16),
+//         ElevatedButton(
+//           onPressed: fetchComprehensiveAnalysis,
+//           child: const Text('Refresh AI Insights'),
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildAIInsightCard(String title, String content) {
+//     return Card(
+//       elevation: 2,
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//       margin: const EdgeInsets.only(bottom: 16),
+//       child: ExpansionTile(
+//         title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.all(16),
+//             child: Text(content),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+class CryptocurrencyAIInsightsTab extends StatefulWidget {
+  final Cryptocurrency cryptocurrency;
+
+  const CryptocurrencyAIInsightsTab({Key? key, required this.cryptocurrency}) : super(key: key);
+
+  @override
+  _CryptocurrencyAIInsightsTabState createState() => _CryptocurrencyAIInsightsTabState();
+}
+
+class _CryptocurrencyAIInsightsTabState extends State<CryptocurrencyAIInsightsTab> {
+  Map<String, String> aiAnalysis = {
+    'general': 'Loading...',
+    'news': 'Loading...',
+    'fundamental': 'Loading...',
+    'team': 'Loading...',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    fetchComprehensiveAnalysis();
+  }
+
+  Future<void> fetchComprehensiveAnalysis() async {
+    try {
+      final analysis = await AIService.generateComprehensiveAnalysis(widget.cryptocurrency);
+      setState(() {
+        aiAnalysis = analysis;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch AI analysis')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              const Text(
-                'AI Insights',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              ...['general', 'news', 'fundamental', 'team'].map(
-                (key) => AIInsightCard(
-                  title: _getTitleForKey(key),
-                  content: aiAnalysis[key] ?? '',
-                ),
-              ),
-              const SizedBox(height: 16),
-            ]),
-          ),
-        ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
-                onPressed: onRefresh,
-                child: const Text('Refresh AI Insights'),
-              ),
-            ),
-          ),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        _buildAIInsights(),
+      ],
+    );
+  }
+
+  Widget _buildAIInsights() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('AI Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 16),
+        _buildAIInsightCard('General Analysis', aiAnalysis['general']!),
+        _buildAIInsightCard('Latest News', aiAnalysis['news']!),
+        _buildAIInsightCard('Fundamental Analysis', aiAnalysis['fundamental']!),
+        _buildAIInsightCard('Team Details', aiAnalysis['team']!),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: fetchComprehensiveAnalysis,
+          child: const Text('Refresh AI Insights'),
         ),
       ],
     );
   }
 
-  String _getTitleForKey(String key) {
-    switch (key) {
-      case 'general':
-        return 'General Analysis';
-      case 'news':
-        return 'Latest News';
-      case 'fundamental':
-        return 'Fundamental Analysis';
-      case 'team':
-        return 'Team Details';
-      default:
-        return 'Unknown';
-    }
-  }
-}
-
-class AIInsightCard extends StatelessWidget {
-  final String title;
-  final String content;
-
-  const AIInsightCard({Key? key, required this.title, required this.content}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildAIInsightCard(String title, String content) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -7045,14 +7527,124 @@ class AIInsightCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: MarkdownBody(
-              data: content,
-              styleSheet: MarkdownStyleSheet(
-                p: const TextStyle(fontSize: 14),
-                h1: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                h2: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                h3: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            child: MarkdownBody(data: content),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+// class CryptocurrencyAIQATab extends StatefulWidget {
+//   final Cryptocurrency cryptocurrency;
+
+//   const CryptocurrencyAIQATab({Key? key, required this.cryptocurrency}) : super(key: key);
+
+//   @override
+//   _CryptocurrencyAIQATabState createState() => _CryptocurrencyAIQATabState();
+// }
+
+// class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
+//   String aiQuestion = '';
+//   String aiAnswer = '';
+
+//   Future<void> askAIQuestion() async {
+//     if (aiQuestion.isEmpty) return;
+//     setState(() => aiAnswer = 'Loading...');
+//     try {
+//       final answer = await AIService.generateAIResponse(
+//         "Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}: $aiQuestion"
+//       );
+//       setState(() => aiAnswer = answer);
+//     } catch (e) {
+//       setState(() => aiAnswer = 'Failed to get AI response');
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(16),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//           const SizedBox(height: 16),
+//           TextField(
+//             onChanged: (value) => setState(() => aiQuestion = value),
+//             decoration: InputDecoration(
+//               hintText: 'Enter your question here',
+//               suffixIcon: IconButton(
+//                 icon: const Icon(Icons.send),
+//                 onPressed: askAIQuestion,
+//               ),
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//           const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+//           const SizedBox(height: 8),
+//           Expanded(
+//             child: SingleChildScrollView(
+//               child: Text(aiAnswer),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+class CryptocurrencyAIQATab extends StatefulWidget {
+  final Cryptocurrency cryptocurrency;
+
+  const CryptocurrencyAIQATab({Key? key, required this.cryptocurrency}) : super(key: key);
+
+  @override
+  _CryptocurrencyAIQATabState createState() => _CryptocurrencyAIQATabState();
+}
+
+class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
+  String aiQuestion = '';
+  String aiAnswer = '';
+
+  Future<void> askAIQuestion() async {
+    if (aiQuestion.isEmpty) return;
+    setState(() => aiAnswer = 'Loading...');
+    try {
+      final answer = await AIService.generateAIResponse(
+        "Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}: $aiQuestion"
+      );
+      setState(() => aiAnswer = answer);
+    } catch (e) {
+      setState(() => aiAnswer = 'Failed to get AI response');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 16),
+          TextField(
+            onChanged: (value) => setState(() => aiQuestion = value),
+            decoration: InputDecoration(
+              hintText: 'Enter your question here',
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: askAIQuestion,
               ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Expanded(
+            child: SingleChildScrollView(
+              child: MarkdownBody(data: aiAnswer),
             ),
           ),
         ],
@@ -7060,84 +7652,26 @@ class AIInsightCard extends StatelessWidget {
     );
   }
 }
-class AIQATab extends StatelessWidget {
-  final String aiQuestion;
-  final String aiAnswer;
-  final ValueChanged<String> onQuestionChanged;
-  final VoidCallback onAskQuestion;
 
-  const AIQATab({
-    Key? key,
-    required this.aiQuestion,
-    required this.aiAnswer,
-    required this.onQuestionChanged,
-    required this.onAskQuestion,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              const Text('Ask AI about this Cryptocurrency', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 16),
-              TextField(
-                onChanged: onQuestionChanged,
-                decoration: InputDecoration(
-                  hintText: 'Enter your question here',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: onAskQuestion,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text('AI Answer:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              MarkdownBody(
-                data: aiAnswer,
-                styleSheet: MarkdownStyleSheet(
-                  p: const TextStyle(fontSize: 14),
-                  h1: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  h2: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  h3: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
-}
-class DetailsTab extends StatelessWidget {
+class CryptocurrencyDetailsTab extends StatelessWidget {
+  final Cryptocurrency cryptocurrency;
   final Map<String, dynamic> details;
 
-  const DetailsTab({Key? key, required this.details}) : super(key: key);
+  const CryptocurrencyDetailsTab({Key? key, required this.cryptocurrency, required this.details}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        AllTimeHighLow(details: details),
+        _buildAllTimeHighLow(),
         const SizedBox(height: 16),
-        AdditionalInfo(details: details),
+        _buildAdditionalInfo(),
       ],
     );
   }
-}
 
-class AllTimeHighLow extends StatelessWidget {
-  final Map<String, dynamic> details;
-
-  const AllTimeHighLow({Key? key, required this.details}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildAllTimeHighLow() {
     final athDate = details['market_data']?['ath_date']?['usd'] != null
         ? DateFormat('yyyy-MM-dd').format(DateTime.parse(details['market_data']['ath_date']['usd']))
         : 'N/A';
@@ -7155,25 +7689,18 @@ class AllTimeHighLow extends StatelessWidget {
           children: [
             const Text('All-Time High/Low', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            StatItem(label: 'All-Time High', value: '\$${NumberFormat("#,##0.00").format(details['market_data']?['ath']?['usd'] ?? 0)}'),
+            _buildStatItem('All-Time High', '\$${NumberFormat("#,##0.00").format(details['market_data']?['ath']?['usd'] ?? 0)}'),
             Text('Date: $athDate', style: const TextStyle(fontSize: 14, color: Colors.grey)),
             const SizedBox(height: 8),
-            StatItem(label: 'All-Time Low', value: '\$${NumberFormat("#,##0.00").format(details['market_data']?['atl']?['usd'] ?? 0)}'),
+            _buildStatItem('All-Time Low', '\$${NumberFormat("#,##0.00").format(details['market_data']?['atl']?['usd'] ?? 0)}'),
             Text('Date: $atlDate', style: const TextStyle(fontSize: 14, color: Colors.grey)),
           ],
         ),
       ),
     );
   }
-}
 
-class AdditionalInfo extends StatelessWidget {
-  final Map<String, dynamic> details;
-
-  const AdditionalInfo({Key? key, required this.details}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildAdditionalInfo() {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -7184,74 +7711,27 @@ class AdditionalInfo extends StatelessWidget {
           children: [
             const Text('Additional Information', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            StatItem(label: 'Hashing Algorithm', value: details['hashing_algorithm'] ?? 'N/A'),
-            StatItem(label: 'Genesis Date', value: details['genesis_date'] ?? 'N/A'),
-            StatItem(label: 'Sentiment Up Votes', value: '${details['sentiment_votes_up_percentage']}%'),
-            StatItem(label: 'Sentiment Down Votes', value: '${details['sentiment_votes_down_percentage']}%'),
-            StatItem(label: 'Market Cap Rank', value: '#${details['market_cap_rank']}'),
+            _buildStatItem('Hashing Algorithm', details['hashing_algorithm'] ?? 'N/A'),
+            _buildStatItem('Genesis Date', details['genesis_date'] ?? 'N/A'),
+            _buildStatItem('Sentiment Up Votes', '${details['sentiment_votes_up_percentage']}%'),
+            _buildStatItem('Sentiment Down Votes', '${details['sentiment_votes_down_percentage']}%'),
+            _buildStatItem('Market Cap Rank', '#${details['market_cap_rank']}'),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildStatItem(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 15)),
+          Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
