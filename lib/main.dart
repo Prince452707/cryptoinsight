@@ -5601,7 +5601,6 @@
 
 
 import 'package:flutter_markdown/flutter_markdown.dart';
-
 import 'similar_coins.dart';
 import 'dart:math';
 import 'package:shimmer/shimmer.dart';
