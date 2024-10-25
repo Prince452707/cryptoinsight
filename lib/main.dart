@@ -9290,7 +9290,6 @@ Feel free to ask any questions or tap one of the suggested questions below!
                 ),
                 filled: true,
                 fillColor: Theme.of(context).primaryColor,
-                //fillColor: Colors.grey[100],
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
