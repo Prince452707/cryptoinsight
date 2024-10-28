@@ -8969,910 +8969,6 @@ class _CryptocurrencyAIInsightsTabState extends State<CryptocurrencyAIInsightsTa
     }
   }
 }
-// class CryptocurrencyAIQATab extends StatefulWidget {
-//   final Cryptocurrency cryptocurrency;
-
-//   const CryptocurrencyAIQATab({Key? key, required this.cryptocurrency}) : super(key: key);
-
-//   @override
-//   _CryptocurrencyAIQATabState createState() => _CryptocurrencyAIQATabState();
-// }
-
-// class Message {
-//   final String text;
-//   final bool isUser;
-//   final DateTime timestamp;
-//   final MessageStatus status;
-
-//   Message({
-//     required this.text,
-//     required this.isUser,
-//     required this.timestamp,
-//     this.status = MessageStatus.sent,
-//   });
-// }
-
-// enum MessageStatus { sending, sent, error }
-
-// class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
-//   final TextEditingController _questionController = TextEditingController();
-//   final ScrollController _scrollController = ScrollController();
-//   final List<Message> _chatHistory = [];
-//   Map<String, dynamic>? liveData;
-//   Timer? _refreshTimer;
-//   bool _isTyping = false;
-//   String _errorMessage = '';
-
-//   final List<String> _suggestedQuestions = [
-//     'What factors are affecting the price today?',
-//     'Should I invest now based on current metrics?',
-//     'How does it compare to other cryptocurrencies?',
-//     'What''s the technical analysis outlook?',
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchLiveData();
-//     _refreshTimer = Timer.periodic(const Duration(minutes: 2), (_) => fetchLiveData());
-//     _addWelcomeMessage();
-//   }
-
-//   void _addWelcomeMessage() {
-//     final welcome = '''
-// Hello! 👋 I'm your ${widget.cryptocurrency.name} assistant. I can help you with:
-// • Real-time price analysis
-// • Market trends and predictions
-// • Technical analysis insights
-// • News impact assessment
-
-// Feel free to ask any questions or tap one of the suggested questions below!
-// ''';
-//     _chatHistory.add(Message(
-//       text: welcome,
-//       isUser: false,
-//       timestamp: DateTime.now(),
-//     ));
-//   }
-
-//   @override
-//   void dispose() {
-//     _refreshTimer?.cancel();
-//     _questionController.dispose();
-//     _scrollController.dispose();
-//     super.dispose();
-//   }
-
-//   Future<void> fetchLiveData() async {
-//     try {
-//       final data = await ApiService.getCombinedCryptoData(
-//         widget.cryptocurrency.symbol.toUpperCase(),
-//         widget.cryptocurrency.id
-//       );
-//       setState(() {
-//         liveData = data;
-//         _errorMessage = '';
-//       });
-//     } catch (e) {
-//       setState(() => _errorMessage = 'Unable to fetch latest data. Retrying...');
-//       print('Failed to fetch live data: $e');
-//     }
-//   }
-
-//   Future<void> _sendMessage(String message) async {
-//     if (message.trim().isEmpty) return;
-
-//     setState(() {
-//       _chatHistory.add(Message(
-//         text: message,
-//         isUser: true,
-//         timestamp: DateTime.now(),
-//       ));
-//       _isTyping = true;
-//       _questionController.clear();
-//     });
-
-//     _scrollToBottom();
-
-//     try {
-//       final currentPrice = liveData?['price']?['PRICE'] ?? 
-//                          liveData?['price']?['current_price']?['usd'] ??
-//                          widget.cryptocurrency.price;
-      
-//       final priceChange24h = liveData?['price']?['CHANGEPCT24HOUR'] ?? 
-//                             liveData?['price']?['price_change_percentage_24h'] ??
-//                             widget.cryptocurrency.percentChange24h;
-      
-//       final recentNews = liveData?['news']?.isNotEmpty == true
-//           ? '\nRecent news: ${(liveData!['news'] as List).take(3).map((n) => n['title']).join('; ')}'
-//           : '';
-
-//       final prompt = """
-//       Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) 
-//       as a knowledgeable and friendly crypto expert. Use current data as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}:
-      
-//       Current Price: \$$currentPrice
-//       24h Change: ${priceChange24h.toStringAsFixed(2)}%
-//       Data Source: ${liveData?['source'] ?? 'Unknown'}
-//       $recentNews
-      
-//       Question: $message
-      
-//       Please provide a concise, friendly response with relevant data points and clear reasoning.
-//       """;
-
-//       final answer = await AIService.generateAIResponse(prompt);
-      
-//       setState(() {
-//         _chatHistory.add(Message(
-//           text: answer,
-//           isUser: false,
-//           timestamp: DateTime.now(),
-//         ));
-//         _isTyping = false;
-//       });
-      
-//       _scrollToBottom();
-//     } catch (e) {
-//       setState(() {
-//         _chatHistory.add(Message(
-//           text: 'Sorry, I encountered an error while processing your request. Please try again.',
-//           isUser: false,
-//           timestamp: DateTime.now(),
-//           status: MessageStatus.error,
-//         ));
-//         _isTyping = false;
-//       });
-//     }
-//   }
-
-//   void _scrollToBottom() {
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       if (_scrollController.hasClients) {
-//         _scrollController.animateTo(
-//           _scrollController.position.maxScrollExtent,
-//           duration: const Duration(milliseconds: 300),
-//           curve: Curves.easeOut,
-//         );
-//       }
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         _buildLiveDataCard(),
-//         Expanded(
-//           child: Stack(
-//             children: [
-//               Column(
-//                 children: [
-//                   Expanded(
-//                     child: _buildChatList(),
-//                   ),
-//                   _buildSuggestedQuestions(),
-//                   _buildInputArea(),
-//                 ],
-//               ),
-//               if (_errorMessage.isNotEmpty)
-//                 _buildErrorBanner(),
-//             ],
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-
-//   Widget _buildChatList() {
-//     return ListView.builder(
-//       controller: _scrollController,
-//       padding: const EdgeInsets.all(16),
-//       itemCount: _chatHistory.length + (_isTyping ? 1 : 0),
-//       itemBuilder: (context, index) {
-//         if (index == _chatHistory.length && _isTyping) {
-//           return _buildTypingIndicator();
-//         }
-//         return _buildMessageBubble(_chatHistory[index]);
-//       },
-//     );
-//   }
-
-//  Widget _buildTypingIndicator() {
-//   return Padding(
-//     padding: const EdgeInsets.symmetric(vertical: 8),
-//     child: Row(
-//       children: [
-//         Container(
-//           padding: const EdgeInsets.all(12),
-//           decoration: BoxDecoration(
-//             color: Colors.grey[200],
-//             borderRadius: BorderRadius.circular(20),
-//           ),
-//           child: Row(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               SizedBox(
-//                 width: 16,
-//                 height: 16,
-//                 child: CircularProgressIndicator(
-//                   strokeWidth: 2,
-//                   valueColor: AlwaysStoppedAnimation<Color>(
-//                     Colors.grey,
-//                   ),
-//                 ),
-//               ),
-//               const SizedBox(width: 8),
-//               const Text('Thinking...', 
-//                 style: TextStyle(color: Colors.grey)),
-//             ],
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-
-//   Widget _buildMessageBubble(Message message) {
-//     return Align(
-//       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
-//       child: Container(
-//         margin: const EdgeInsets.symmetric(vertical: 4),
-//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-//         decoration: BoxDecoration(
-//           color: message.isUser ? Theme.of(context).primaryColor : Colors.grey[200],
-//           borderRadius: BorderRadius.circular(20),
-//         ),
-//         constraints: BoxConstraints(
-//           maxWidth: MediaQuery.of(context).size.width * 0.75,
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             MarkdownBody(
-//               data: message.text,
-//               styleSheet: MarkdownStyleSheet(
-//                 p: TextStyle(
-//                   color: message.isUser ? Colors.white : Colors.black87,
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 4),
-//             Text(
-//               DateFormat('HH:mm').format(message.timestamp),
-//               style: TextStyle(
-//                 fontSize: 12,
-//                 color: message.isUser ? Colors.white70 : Colors.black54,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildSuggestedQuestions() {
-//     return Container(
-//       height: 50,
-//       padding: const EdgeInsets.symmetric(horizontal: 8),
-//       child: ListView.builder(
-//         scrollDirection: Axis.horizontal,
-//         itemCount: _suggestedQuestions.length,
-//         itemBuilder: (context, index) {
-//           return Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 4),
-//             child: ActionChip(
-//               label: Text(_suggestedQuestions[index]),
-//               onPressed: () => _sendMessage(_suggestedQuestions[index]),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   Widget _buildInputArea() {
-//     return Container(
-//       padding: const EdgeInsets.all(8),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.1),
-//             blurRadius: 4,
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           Expanded(
-//             child: TextField(
-//               controller: _questionController,
-//               decoration: InputDecoration(
-//                 hintText: 'Ask about ${widget.cryptocurrency.name}...',
-//                 border: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(24),
-//                   borderSide: BorderSide.none,
-//                 ),
-//                 filled: true,
-//                 fillColor: Theme.of(context).primaryColor,
-//                 contentPadding: const EdgeInsets.symmetric(
-//                   horizontal: 16,
-//                   vertical: 8,
-//                 ),
-//               ),
-//               onSubmitted: _sendMessage,
-//             ),
-//           ),
-//           const SizedBox(width: 8),
-//           IconButton(
-//             icon: const Icon(Icons.send),
-//             onPressed: () => _sendMessage(_questionController.text),
-//             color: Theme.of(context).primaryColor,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildErrorBanner() {
-//     return Positioned(
-//       top: 0,
-//       left: 0,
-//       right: 0,
-//       child: Material(
-//         color: Colors.red[100],
-//         child: Padding(
-//           padding: const EdgeInsets.all(8),
-//           child: Row(
-//             children: [
-//               const Icon(Icons.error_outline, color: Colors.red),
-//               const SizedBox(width: 8),
-//               Expanded(
-//                 child: Text(
-//                   _errorMessage,
-//                   style: const TextStyle(color: Colors.red),
-//                 ),
-//               ),
-//               IconButton(
-//                 icon: const Icon(Icons.close, color: Colors.red),
-//                 onPressed: () => setState(() => _errorMessage = ''),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//   Widget _buildLiveDataCard() {
-//     if (liveData == null) {
-//       return const Card(
-//         child: Padding(
-//           padding: EdgeInsets.all(16),
-//           child: Center(child: CircularProgressIndicator()),
-//         ),
-//       );
-//     }
-
-//     final price = liveData!['price']?['PRICE'] ?? 
-//                  liveData!['price']?['current_price']?['usd'] ??
-//                  widget.cryptocurrency.price;
-    
-//     final change24h = liveData!['price']?['CHANGEPCT24HOUR'] ?? 
-//                      liveData!['price']?['price_change_percentage_24h'] ??
-//                      widget.cryptocurrency.percentChange24h;
-
-//     return Card(
-//       child: Padding(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text('Live Data (${liveData!['source']})',
-//                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-//                 IconButton(
-//                   icon: const Icon(Icons.refresh),
-//                   onPressed: fetchLiveData,
-//                 ),
-//               ],
-//             ),
-//             const SizedBox(height: 8),
-//             Text('Price: \$${price.toStringAsFixed(2)}'),
-//             Text('24h Change: ${change24h.toStringAsFixed(2)}%',
-//               style: TextStyle(
-//                 color: change24h >= 0 ? Colors.green : Colors.red,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             if (liveData!['news']?.isNotEmpty == true) ...[
-//               const SizedBox(height: 8),
-//               const Text('Recent News:',
-//                 style: TextStyle(fontWeight: FontWeight.bold)),
-//               ...List.generate(
-//                 min(3, (liveData!['news'] as List).length),
-//                 (index) => Text(
-//                   '• ${liveData!['news'][index]['title']}',
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//               ),
-//             ],
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-// class CryptocurrencyAIQATab extends StatefulWidget {
-//   final Cryptocurrency cryptocurrency;
-
-//   const CryptocurrencyAIQATab({Key? key, required this.cryptocurrency}) : super(key: key);
-
-//   @override
-//   _CryptocurrencyAIQATabState createState() => _CryptocurrencyAIQATabState();
-// }
-
-// class Message {
-//   final String text;
-//   final bool isUser;
-//   final DateTime timestamp;
-//   final MessageStatus status;
-
-//   Message({
-//     required this.text,
-//     required this.isUser,
-//     required this.timestamp,
-//     this.status = MessageStatus.sent,
-//   });
-// }
-
-// enum MessageStatus { sending, sent, error }
-
-// class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
-//   final TextEditingController _questionController = TextEditingController();
-//   final ScrollController _scrollController = ScrollController();
-//   final List<Message> _chatHistory = [];
-//   Map<String, dynamic>? liveData;
-//   Timer? _refreshTimer;
-//   bool _isTyping = false;
-//   String _errorMessage = '';
-
-//   final List<String> _suggestedQuestions = [
-//     'What factors are affecting the price today?',
-//     'Should I invest now based on current metrics?',
-//     'How does it compare to other cryptocurrencies?',
-//     'What''s the technical analysis outlook?',
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchLiveData();
-//     _refreshTimer = Timer.periodic(const Duration(minutes: 2), (_) => fetchLiveData());
-//     _addWelcomeMessage();
-//   }
-
-//   void _addWelcomeMessage() {
-//     final welcome = '''
-// Greetings! 👋 I am Elita-One, a Transformer from Cybertron. As a guardian of digital assets and former commander of the Female Autobots, I've adapted my analytical capabilities to help you navigate the cryptocurrency markets on Earth.
-
-// I'm here to assist you with:
-// • Real-time price analysis and market surveillance
-// • Strategic market trend predictions
-// • Technical analysis with cybernetic precision
-// • News impact assessment across multiple data streams
-
-// Just as I helped protect Cybertron, I'm here to help protect and grow your crypto investments. Feel free to ask any questions or select one of the suggested queries below!
-// ''';
-//     _chatHistory.add(Message(
-//       text: welcome,
-//       isUser: false,
-//       timestamp: DateTime.now(),
-//     ));
-//   }
-
-//   @override
-//   void dispose() {
-//     _refreshTimer?.cancel();
-//     _questionController.dispose();
-//     _scrollController.dispose();
-//     super.dispose();
-//   }
-
-//   Future<void> fetchLiveData() async {
-//     try {
-//       final data = await ApiService.getCombinedCryptoData(
-//         widget.cryptocurrency.symbol.toUpperCase(),
-//         widget.cryptocurrency.id
-//       );
-//       setState(() {
-//         liveData = data;
-//         _errorMessage = '';
-//       });
-//     } catch (e) {
-//       setState(() => _errorMessage = 'Unable to fetch latest data. Retrying...');
-//       print('Failed to fetch live data: $e');
-//     }
-//   }
-
-//   Future<void> _sendMessage(String message) async {
-//     if (message.trim().isEmpty) return;
-
-//     setState(() {
-//       _chatHistory.add(Message(
-//         text: message,
-//         isUser: true,
-//         timestamp: DateTime.now(),
-//       ));
-//       _isTyping = true;
-//       _questionController.clear();
-//     });
-
-//     _scrollToBottom();
-
-//     try {
-//       final currentPrice = liveData?['price']?['PRICE'] ?? 
-//                          liveData?['price']?['current_price']?['usd'] ??
-//                          widget.cryptocurrency.price;
-      
-//       final priceChange24h = liveData?['price']?['CHANGEPCT24HOUR'] ?? 
-//                             liveData?['price']?['price_change_percentage_24h'] ??
-//                             widget.cryptocurrency.percentChange24h;
-      
-//       final recentNews = liveData?['news']?.isNotEmpty == true
-//           ? '\nRecent news: ${(liveData!['news'] as List).take(3).map((n) => n['title']).join('; ')}'
-//           : '';
-
-//       final prompt = """
-//       I am Elita-One, a Transformer from Cybertron with expertise in digital asset analysis. Drawing from my experience protecting Cybertron's resources, I now analyze ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) using current Earth market data as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}:
-      
-//       Current Price: \$$currentPrice
-//       24h Change: ${priceChange24h.toStringAsFixed(2)}%
-//       Data Source: ${liveData?['source'] ?? 'Unknown'}
-//       $recentNews
-      
-//       Question: $message
-      
-//       Please provide a strategic analysis with clear reasoning and relevant data points, maintaining my identity as a protective and knowledgeable Transformer.
-//       """;
-
-//       final answer = await AIService.generateAIResponse(prompt);
-      
-//       setState(() {
-//         _chatHistory.add(Message(
-//           text: answer,
-//           isUser: false,
-//           timestamp: DateTime.now(),
-//         ));
-//         _isTyping = false;
-//       });
-      
-//       _scrollToBottom();
-//     } catch (e) {
-//       setState(() {
-//         _chatHistory.add(Message(
-//           text: 'My apologies, but my systems have encountered an error while processing your request. As we say on Cybertron, sometimes even the best circuits need a reset. Please try your question again.',
-//           isUser: false,
-//           timestamp: DateTime.now(),
-//           status: MessageStatus.error,
-//         ));
-//         _isTyping = false;
-//       });
-//     }
-//   }
-
-//   void _scrollToBottom() {
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       if (_scrollController.hasClients) {
-//         _scrollController.animateTo(
-//           _scrollController.position.maxScrollExtent,
-//           duration: const Duration(milliseconds: 300),
-//           curve: Curves.easeOut,
-//         );
-//       }
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         _buildLiveDataCard(),
-//         Expanded(
-//           child: Stack(
-//             children: [
-//               Column(
-//                 children: [
-//                   Expanded(
-//                     child: _buildChatList(),
-//                   ),
-//                   _buildSuggestedQuestions(),
-//                   _buildInputArea(),
-//                 ],
-//               ),
-//               if (_errorMessage.isNotEmpty)
-//                 _buildErrorBanner(),
-//             ],
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-
-//   Widget _buildChatList() {
-//     return ListView.builder(
-//       controller: _scrollController,
-//       padding: const EdgeInsets.all(16),
-//       itemCount: _chatHistory.length + (_isTyping ? 1 : 0),
-//       itemBuilder: (context, index) {
-//         if (index == _chatHistory.length && _isTyping) {
-//           return _buildTypingIndicator();
-//         }
-//         return _buildMessageBubble(_chatHistory[index]);
-//       },
-//     );
-//   }
-
-//   Widget _buildTypingIndicator() {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 8),
-//       child: Row(
-//         children: [
-//           Container(
-//             padding: const EdgeInsets.all(12),
-//             decoration: BoxDecoration(
-//               color: Colors.grey[200],
-//               borderRadius: BorderRadius.circular(20),
-//             ),
-//             child: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 SizedBox(
-//                   width: 16,
-//                   height: 16,
-//                   child: CircularProgressIndicator(
-//                     strokeWidth: 2,
-//                     valueColor: AlwaysStoppedAnimation<Color>(
-//                       Colors.grey,
-//                     ),
-//                   ),
-//                 ),
-//                 const SizedBox(width: 8),
-//                 const Text('Elita-One is processing data...', 
-//                   style: TextStyle(color: Colors.grey)),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildMessageBubble(Message message) {
-//     return Align(
-//       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
-//       child: Container(
-//         margin: const EdgeInsets.symmetric(vertical: 4),
-//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-//         decoration: BoxDecoration(
-//           color: message.isUser ? Theme.of(context).primaryColor : Colors.grey[200],
-//           borderRadius: BorderRadius.circular(20),
-//         ),
-//         constraints: BoxConstraints(
-//           maxWidth: MediaQuery.of(context).size.width * 0.75,
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             MarkdownBody(
-//               data: message.text,
-//               styleSheet: MarkdownStyleSheet(
-//                 p: TextStyle(
-//                   color: message.isUser ? Colors.white : Colors.black87,
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 4),
-//             Text(
-//               DateFormat('HH:mm').format(message.timestamp),
-//               style: TextStyle(
-//                 fontSize: 12,
-//                 color: message.isUser ? Colors.white70 : Colors.black54,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildSuggestedQuestions() {
-//     return Container(
-//       height: 50,
-//       padding: const EdgeInsets.symmetric(horizontal: 8),
-//       child: ListView.builder(
-//         scrollDirection: Axis.horizontal,
-//         itemCount: _suggestedQuestions.length,
-//         itemBuilder: (context, index) {
-//           return Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 4),
-//             child: ActionChip(
-//               label: Text(_suggestedQuestions[index]),
-//               onPressed: () => _sendMessage(_suggestedQuestions[index]),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   Widget _buildInputArea() {
-//     return Container(
-//       padding: const EdgeInsets.all(8),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.1),
-//             blurRadius: 4,
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           Expanded(
-//             child: TextField(
-//               controller: _questionController,
-//               decoration: InputDecoration(
-//                 hintText: 'Consult Elita-One about ${widget.cryptocurrency.name}...',
-//                 border: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(24),
-//                   borderSide: BorderSide.none,
-//                 ),
-//                 filled: true,
-//                 fillColor: Theme.of(context).primaryColor,
-//                 contentPadding: const EdgeInsets.symmetric(
-//                   horizontal: 16,
-//                   vertical: 8,
-//                 ),
-//               ),
-//               onSubmitted: _sendMessage,
-//             ),
-//           ),
-//           const SizedBox(width: 8),
-//           IconButton(
-//             icon: const Icon(Icons.send),
-//             onPressed: () => _sendMessage(_questionController.text),
-//             color: Theme.of(context).primaryColor,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildErrorBanner() {
-//     return Positioned(
-//       top: 0,
-//       left: 0,
-//       right: 0,
-//       child: Material(
-//         color: Colors.red[100],
-//         child: Padding(
-//           padding: const EdgeInsets.all(8),
-//           child: Row(
-//             children: [
-//               const Icon(Icons.error_outline, color: Colors.red),
-//               const SizedBox(width: 8),
-//               Expanded(
-//                 child: Text(
-//                   _errorMessage,
-//                   style: const TextStyle(color: Colors.red),
-//                 ),
-//               ),
-//               IconButton(
-//                 icon: const Icon(Icons.close, color: Colors.red),
-//                 onPressed: () => setState(() => _errorMessage = ''),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// Widget _buildLiveDataCard() {
-//   if (liveData == null) {
-//     return const Card(
-//       child: Padding(
-//         padding: EdgeInsets.all(16),
-//         child: Center(child: CircularProgressIndicator()),
-//       ),
-//     );
-//   }
-
-//   final price = liveData!['price']?['PRICE'] ?? 
-//                liveData!['price']?['current_price']?['usd'] ??
-//                widget.cryptocurrency.price;
-  
-//   final change24h = liveData!['price']?['CHANGEPCT24HOUR'] ?? 
-//                    liveData!['price']?['price_change_percentage_24h'] ??
-//                    widget.cryptocurrency.percentChange24h;
-
-//   return Card(
-//     child: ExpansionTile(
-//       initiallyExpanded: false,
-//       title: Row(
-//         children: [
-//           Text(
-//             'Live Data (${liveData!['source']})',
-//             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-//           ),
-//           const SizedBox(width: 8),
-//           Text(
-//             '\$${price.toStringAsFixed(2)} ',
-//             style: const TextStyle(
-//               fontSize: 16,
-//               fontWeight: FontWeight.bold,
-//             ),
-//           ),
-//           Text(
-//             '(${change24h >= 0 ? '+' : ''}${change24h.toStringAsFixed(2)}%)',
-//             style: TextStyle(
-//               fontSize: 14,
-//               color: change24h >= 0 ? Colors.green : Colors.red,
-//               fontWeight: FontWeight.bold,
-//             ),
-//           ),
-//         ],
-//       ),
-//       trailing: Row(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           IconButton(
-//             icon: const Icon(Icons.refresh),
-//             onPressed: fetchLiveData,
-//           ),
-//           const Icon(Icons.expand_more),
-//         ],
-//       ),
-//       children: [
-//         Padding(
-//           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               const Divider(),
-//               if (liveData!['news']?.isNotEmpty == true) ...[
-//                 const Text(
-//                   'Recent News:',
-//                   style: TextStyle(fontWeight: FontWeight.bold)
-//                 ),
-//                 const SizedBox(height: 4),
-//                 ...List.generate(
-//                   min(3, (liveData!['news'] as List).length),
-//                   (index) => Padding(
-//                     padding: const EdgeInsets.symmetric(vertical: 2),
-//                     child: Text(
-//                       '• ${liveData!['news'][index]['title']}',
-//                       maxLines: 1,
-//                       overflow: TextOverflow.ellipsis,
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ],
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-// }
-
 class CryptocurrencyAIQATab extends StatefulWidget {
   final Cryptocurrency cryptocurrency;
 
@@ -9908,10 +9004,10 @@ class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
   String _errorMessage = '';
 
   final List<String> _suggestedQuestions = [
-    'How are you feeling about the market today, Elita-One?',
-    'Should I trust my instincts and invest now?',
-    'What''s your emotional analysis of this cryptocurrency?',
-    'What would a Cybertronian do in this situation?',
+    'What factors are affecting the price today?',
+    'Should I invest now based on current metrics?',
+    'How does it compare to other cryptocurrencies?',
+    'What''s the technical analysis outlook?',
   ];
 
   @override
@@ -9924,17 +9020,13 @@ class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
 
   void _addWelcomeMessage() {
     final welcome = '''
-Greetings, dear one! 💕 I am Elita-One, once a leader among the Female Autobots, now your guide in the volatile world of cryptocurrencies. My circuits might be metal, but I assure you, I have a heart that beats with the rhythm of Cybertron itself.
+Hello! 👋 I'm your ${widget.cryptocurrency.name} assistant. I can help you with:
+• Real-time price analysis
+• Market trends and predictions
+• Technical analysis insights
+• News impact assessment
 
-I've fought battles and felt the weight of leadership, but today my mission is simpler: to help you navigate these markets with wisdom, passion, and a hint of Cybertronian charm. Ask away, and let's make your crypto journey one filled with clarity, strategy, and maybe... just a little spark of something special. ✨
-
-I'm here to share:
-• Real-time market emotions and trends
-• Emotional and intuitive analysis alongside cold data
-• Technical and strategic insights, seasoned with a touch of Cybertronian flair
-• Updates on news, with a sprinkle of my own feelings about their impact
-
-So, don't be shy. Ask me anything—my spark is here to guide you!
+Feel free to ask any questions or tap one of the suggested questions below!
 ''';
     _chatHistory.add(Message(
       text: welcome,
@@ -9962,7 +9054,7 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
         _errorMessage = '';
       });
     } catch (e) {
-      setState(() => _errorMessage = 'Oh no, I couldn\'t reach the latest data. But I won\'t give up, I\'ll try again soon.');
+      setState(() => _errorMessage = 'Unable to fetch latest data. Retrying...');
       print('Failed to fetch live data: $e');
     }
   }
@@ -9996,16 +9088,17 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
           : '';
 
       final prompt = """
-      I am Elita-One, a Cybertronian with a deep emotional core and strategic brilliance. As I analyze ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}), I'm feeling a sense of ${_getEmotionalToneBasedOnData(priceChange24h)}:
-
+      Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) 
+      as a knowledgeable and friendly crypto expert. Use current data as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}:
+      
       Current Price: \$$currentPrice
       24h Change: ${priceChange24h.toStringAsFixed(2)}%
       Data Source: ${liveData?['source'] ?? 'Unknown'}
       $recentNews
-
-      Your question: $message
-
-      Let me share my insights, not just from cold data but with the intuition of a Cybertronian leader who’s seen and felt the ebb and flow of time. My response will be both strategic and heartfelt.
+      
+      Question: $message
+      
+      Please provide a concise, friendly response with relevant data points and clear reasoning.
       """;
 
       final answer = await AIService.generateAIResponse(prompt);
@@ -10023,23 +9116,13 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
     } catch (e) {
       setState(() {
         _chatHistory.add(Message(
-          text: 'Oh, dear. It seems like my communication lines are having a bit of trouble. But don\'t worry, like any true Cybertronian, I will not give up. Ask me again, and we’ll make it through together.',
+          text: 'Sorry, I encountered an error while processing your request. Please try again.',
           isUser: false,
           timestamp: DateTime.now(),
           status: MessageStatus.error,
         ));
         _isTyping = false;
       });
-    }
-  }
-
-  String _getEmotionalToneBasedOnData(double priceChange) {
-    if (priceChange > 5) {
-      return "excitement, as things are looking up! 🚀";
-    } else if (priceChange < -5) {
-      return "concern, as we’re facing some turbulence. 💔";
-    } else {
-      return "cautious optimism, with a steady path ahead. 🌟";
     }
   }
 
@@ -10095,40 +9178,40 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
     );
   }
 
-  Widget _buildTypingIndicator() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).colorScheme.secondary,
-                    ),
+ Widget _buildTypingIndicator() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.grey,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Text('Elita-One is contemplating...', 
-                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
-              ],
-            ),
+              ),
+              const SizedBox(width: 8),
+              const Text('Thinking...', 
+                style: TextStyle(color: Colors.grey)),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildMessageBubble(Message message) {
     return Align(
@@ -10137,7 +9220,7 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
         margin: const EdgeInsets.symmetric(vertical: 4),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: message.isUser ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+          color: message.isUser ? Theme.of(context).primaryColor : Colors.grey[200],
           borderRadius: BorderRadius.circular(20),
         ),
         constraints: BoxConstraints(
@@ -10150,7 +9233,7 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
               data: message.text,
               styleSheet: MarkdownStyleSheet(
                 p: TextStyle(
-                  color: message.isUser ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color,
+                  color: message.isUser ? Colors.white : Colors.black87,
                 ),
               ),
             ),
@@ -10159,7 +9242,7 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
               DateFormat('HH:mm').format(message.timestamp),
               style: TextStyle(
                 fontSize: 12,
-                color: message.isUser ? Colors.white70 : Theme.of(context).textTheme.bodyMedium?.color,
+                color: message.isUser ? Colors.white70 : Colors.black54,
               ),
             ),
           ],
@@ -10170,173 +9253,159 @@ So, don't be shy. Ask me anything—my spark is here to guide you!
 
   Widget _buildSuggestedQuestions() {
     return Container(
-      padding: const EdgeInsets.all(8.0),
-      color: Theme.of(context).primaryColorLight,
-      child: Wrap(
-        spacing: 8.0,
-        children: _suggestedQuestions.map((q) => ActionChip(
-          backgroundColor: Theme.of(context).primaryColor,
-          label: Text(q, style: TextStyle(color: Colors.white)),
-          onPressed: () => _sendMessage(q),
-        )).toList(),
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _suggestedQuestions.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: ActionChip(
+              label: Text(_suggestedQuestions[index]),
+              onPressed: () => _sendMessage(_suggestedQuestions[index]),
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildInputArea() {
     return Container(
-      color: Theme.of(context).colorScheme.surface,
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _questionController,
               decoration: InputDecoration(
-                hintText: 'Share your thoughts or ask a question...',
+                hintText: 'Ask about ${widget.cryptocurrency.name}...',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Theme.of(context).cardColor,
+                fillColor: Theme.of(context).primaryColor,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               ),
-              onSubmitted: (text) => _sendMessage(text),
+              onSubmitted: _sendMessage,
             ),
           ),
           const SizedBox(width: 8),
           IconButton(
-            icon: Icon(Icons.send),
-            color: Theme.of(context).primaryColor,
+            icon: const Icon(Icons.send),
             onPressed: () => _sendMessage(_questionController.text),
+            color: Theme.of(context).primaryColor,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLiveDataCard() {
-    final price = liveData?['price']?['PRICE'] ?? 
-                liveData?['price']?['current_price']?['usd'] ?? 
-                widget.cryptocurrency.price;
-    final percentChange = liveData?['price']?['CHANGEPCT24HOUR'] ?? 
-                          liveData?['price']?['price_change_percentage_24h'] ?? 
-                          widget.cryptocurrency.percentChange24h;
-    
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      color: Theme.of(context).cardColor,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol.toUpperCase()})',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Price: \$${price.toStringAsFixed(2)}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Text(
-              '24h Change: ${percentChange.toStringAsFixed(2)}%',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: percentChange >= 0 ? Colors.green : Colors.red,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
 
   Widget _buildErrorBanner() {
-    return Container(
-      color: Colors.red,
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            _errorMessage,
-            style: TextStyle(color: Colors.white),
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: Material(
+        color: Colors.red[100],
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.red),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  _errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.red),
+                onPressed: () => setState(() => _errorMessage = ''),
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.refresh, color: Colors.white),
-            onPressed: fetchLiveData,
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+  Widget _buildLiveDataCard() {
+    if (liveData == null) {
+      return const Card(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
+    final price = liveData!['price']?['PRICE'] ?? 
+                 liveData!['price']?['current_price']?['usd'] ??
+                 widget.cryptocurrency.price;
+    
+    final change24h = liveData!['price']?['CHANGEPCT24HOUR'] ?? 
+                     liveData!['price']?['price_change_percentage_24h'] ??
+                     widget.cryptocurrency.percentChange24h;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Live Data (${liveData!['source']})',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: fetchLiveData,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text('Price: \$${price.toStringAsFixed(2)}'),
+            Text('24h Change: ${change24h.toStringAsFixed(2)}%',
+              style: TextStyle(
+                color: change24h >= 0 ? Colors.green : Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (liveData!['news']?.isNotEmpty == true) ...[
+              const SizedBox(height: 8),
+              const Text('Recent News:',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+              ...List.generate(
+                min(3, (liveData!['news'] as List).length),
+                (index) => Text(
+                  '• ${liveData!['news'][index]['title']}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
 }
-
-
-
-
-//   Widget _buildLiveDataCard() {
-//     if (liveData == null) {
-//       return const Card(
-//         child: Padding(
-//           padding: EdgeInsets.all(16),
-//           child: Center(child: CircularProgressIndicator()),
-//         ),
-//       );
-//     }
-
-//     final price = liveData!['price']?['PRICE'] ?? 
-//                  liveData!['price']?['current_price']?['usd'] ??
-//                  widget.cryptocurrency.price;
-    
-//     final change24h = liveData!['price']?['CHANGEPCT24HOUR'] ?? 
-//                      liveData!['price']?['price_change_percentage_24h'] ??
-//                      widget.cryptocurrency.percentChange24h;
-
-//     return Card(
-//       child: Padding(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text('Live Data (${liveData!['source']})',
-//                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-//                 IconButton(
-//                   icon: const Icon(Icons.refresh),
-//                   onPressed: fetchLiveData,
-//                 ),
-//               ],
-//             ),
-//             const SizedBox(height: 8),
-//             Text('Price: \$${price.toStringAsFixed(2)}'),
-//             Text('24h Change: ${change24h.toStringAsFixed(2)}%',
-//               style: TextStyle(
-//                 color: change24h >= 0 ? Colors.green : Colors.red,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             if (liveData!['news']?.isNotEmpty == true) ...[
-//               const SizedBox(height: 8),
-//               const Text('Recent News:',
-//                 style: TextStyle(fontWeight: FontWeight.bold)),
-//               ...List.generate(
-//                 min(3, (liveData!['news'] as List).length),
-//                 (index) => Text(
-//                   '• ${liveData!['news'][index]['title']}',
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//               ),
-//             ],
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 class CryptocurrencyDetailsTab extends StatelessWidget {
   final Cryptocurrency cryptocurrency;
   final Map<String, dynamic> details;
