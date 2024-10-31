@@ -8969,6 +8969,443 @@ class _CryptocurrencyAIInsightsTabState extends State<CryptocurrencyAIInsightsTa
     }
   }
 }
+// class CryptocurrencyAIQATab extends StatefulWidget {
+//   final Cryptocurrency cryptocurrency;
+
+//   const CryptocurrencyAIQATab({Key? key, required this.cryptocurrency}) : super(key: key);
+
+//   @override
+//   _CryptocurrencyAIQATabState createState() => _CryptocurrencyAIQATabState();
+// }
+
+// class Message {
+//   final String text;
+//   final bool isUser;
+//   final DateTime timestamp;
+//   final MessageStatus status;
+
+//   Message({
+//     required this.text,
+//     required this.isUser,
+//     required this.timestamp,
+//     this.status = MessageStatus.sent,
+//   });
+// }
+
+// enum MessageStatus { sending, sent, error }
+
+// class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
+//   final TextEditingController _questionController = TextEditingController();
+//   final ScrollController _scrollController = ScrollController();
+//   final List<Message> _chatHistory = [];
+//   Map<String, dynamic>? liveData;
+//   Timer? _refreshTimer;
+//   bool _isTyping = false;
+//   String _errorMessage = '';
+
+//   final List<String> _suggestedQuestions = [
+//     'What factors are affecting the price today?',
+//     'Should I invest now based on current metrics?',
+//     'How does it compare to other cryptocurrencies?',
+//     'What''s the technical analysis outlook?',
+//   ];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchLiveData();
+//     _refreshTimer = Timer.periodic(const Duration(minutes: 2), (_) => fetchLiveData());
+//     _addWelcomeMessage();
+//   }
+
+//   void _addWelcomeMessage() {
+//     final welcome = '''
+// Hello! 👋 I'm your ${widget.cryptocurrency.name} assistant. I can help you with:
+// • Real-time price analysis
+// • Market trends and predictions
+// • Technical analysis insights
+// • News impact assessment
+
+// Feel free to ask any questions or tap one of the suggested questions below!
+// ''';
+//     _chatHistory.add(Message(
+//       text: welcome,
+//       isUser: false,
+//       timestamp: DateTime.now(),
+//     ));
+//   }
+
+//   @override
+//   void dispose() {
+//     _refreshTimer?.cancel();
+//     _questionController.dispose();
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
+
+//   Future<void> fetchLiveData() async {
+//     try {
+//       final data = await ApiService.getCombinedCryptoData(
+//         widget.cryptocurrency.symbol.toUpperCase(),
+//         widget.cryptocurrency.id
+//       );
+//       setState(() {
+//         liveData = data;
+//         _errorMessage = '';
+//       });
+//     } catch (e) {
+//       setState(() => _errorMessage = 'Unable to fetch latest data. Retrying...');
+//       print('Failed to fetch live data: $e');
+//     }
+//   }
+
+//   Future<void> _sendMessage(String message) async {
+//     if (message.trim().isEmpty) return;
+
+//     setState(() {
+//       _chatHistory.add(Message(
+//         text: message,
+//         isUser: true,
+//         timestamp: DateTime.now(),
+//       ));
+//       _isTyping = true;
+//       _questionController.clear();
+//     });
+
+//     _scrollToBottom();
+
+//     try {
+//       final currentPrice = liveData?['price']?['PRICE'] ?? 
+//                          liveData?['price']?['current_price']?['usd'] ??
+//                          widget.cryptocurrency.price;
+      
+//       final priceChange24h = liveData?['price']?['CHANGEPCT24HOUR'] ?? 
+//                             liveData?['price']?['price_change_percentage_24h'] ??
+//                             widget.cryptocurrency.percentChange24h;
+      
+//       final recentNews = liveData?['news']?.isNotEmpty == true
+//           ? '\nRecent news: ${(liveData!['news'] as List).take(3).map((n) => n['title']).join('; ')}'
+//           : '';
+
+//       final prompt = """
+//       Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) 
+//       as a knowledgeable and friendly crypto expert. Use current data as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}:
+      
+//       Current Price: \$$currentPrice
+//       24h Change: ${priceChange24h.toStringAsFixed(2)}%
+//       Data Source: ${liveData?['source'] ?? 'Unknown'}
+//       $recentNews
+      
+//       Question: $message
+      
+//       Please provide a concise, friendly response with relevant data points and clear reasoning.
+//       """;
+
+//       final answer = await AIService.generateAIResponse(prompt);
+      
+//       setState(() {
+//         _chatHistory.add(Message(
+//           text: answer,
+//           isUser: false,
+//           timestamp: DateTime.now(),
+//         ));
+//         _isTyping = false;
+//       });
+      
+//       _scrollToBottom();
+//     } catch (e) {
+//       setState(() {
+//         _chatHistory.add(Message(
+//           text: 'Sorry, I encountered an error while processing your request. Please try again.',
+//           isUser: false,
+//           timestamp: DateTime.now(),
+//           status: MessageStatus.error,
+//         ));
+//         _isTyping = false;
+//       });
+//     }
+//   }
+
+//   void _scrollToBottom() {
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       if (_scrollController.hasClients) {
+//         _scrollController.animateTo(
+//           _scrollController.position.maxScrollExtent,
+//           duration: const Duration(milliseconds: 300),
+//           curve: Curves.easeOut,
+//         );
+//       }
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         _buildLiveDataCard(),
+//         Expanded(
+//           child: Stack(
+//             children: [
+//               Column(
+//                 children: [
+//                   Expanded(
+//                     child: _buildChatList(),
+//                   ),
+//                   _buildSuggestedQuestions(),
+//                   _buildInputArea(),
+//                 ],
+//               ),
+//               if (_errorMessage.isNotEmpty)
+//                 _buildErrorBanner(),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildChatList() {
+//     return ListView.builder(
+//       controller: _scrollController,
+//       padding: const EdgeInsets.all(16),
+//       itemCount: _chatHistory.length + (_isTyping ? 1 : 0),
+//       itemBuilder: (context, index) {
+//         if (index == _chatHistory.length && _isTyping) {
+//           return _buildTypingIndicator();
+//         }
+//         return _buildMessageBubble(_chatHistory[index]);
+//       },
+//     );
+//   }
+
+//  Widget _buildTypingIndicator() {
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(vertical: 8),
+//     child: Row(
+//       children: [
+//         Container(
+//           padding: const EdgeInsets.all(12),
+//           decoration: BoxDecoration(
+//             color: Colors.grey[200],
+//             borderRadius: BorderRadius.circular(20),
+//           ),
+//           child: Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               SizedBox(
+//                 width: 16,
+//                 height: 16,
+//                 child: CircularProgressIndicator(
+//                   strokeWidth: 2,
+//                   valueColor: AlwaysStoppedAnimation<Color>(
+//                     Colors.grey,
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(width: 8),
+//               const Text('Thinking...', 
+//                 style: TextStyle(color: Colors.grey)),
+//             ],
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
+
+//   Widget _buildMessageBubble(Message message) {
+//     return Align(
+//       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
+//       child: Container(
+//         margin: const EdgeInsets.symmetric(vertical: 4),
+//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+//         decoration: BoxDecoration(
+//           color: message.isUser ? Theme.of(context).primaryColor : Colors.grey[200],
+//           borderRadius: BorderRadius.circular(20),
+//         ),
+//         constraints: BoxConstraints(
+//           maxWidth: MediaQuery.of(context).size.width * 0.75,
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             MarkdownBody(
+//               data: message.text,
+//               styleSheet: MarkdownStyleSheet(
+//                 p: TextStyle(
+//                   color: message.isUser ? Colors.white : Colors.black87,
+//                 ),
+//               ),
+//             ),
+//             const SizedBox(height: 4),
+//             Text(
+//               DateFormat('HH:mm').format(message.timestamp),
+//               style: TextStyle(
+//                 fontSize: 12,
+//                 color: message.isUser ? Colors.white70 : Colors.black54,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildSuggestedQuestions() {
+//     return Container(
+//       height: 50,
+//       padding: const EdgeInsets.symmetric(horizontal: 8),
+//       child: ListView.builder(
+//         scrollDirection: Axis.horizontal,
+//         itemCount: _suggestedQuestions.length,
+//         itemBuilder: (context, index) {
+//           return Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 4),
+//             child: ActionChip(
+//               label: Text(_suggestedQuestions[index]),
+//               onPressed: () => _sendMessage(_suggestedQuestions[index]),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+
+//   Widget _buildInputArea() {
+//     return Container(
+//       padding: const EdgeInsets.all(8),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.1),
+//             blurRadius: 4,
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: TextField(
+//               controller: _questionController,
+//               decoration: InputDecoration(
+//                 hintText: 'Ask about ${widget.cryptocurrency.name}...',
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(24),
+//                   borderSide: BorderSide.none,
+//                 ),
+//                 filled: true,
+//                 fillColor: Theme.of(context).primaryColor,
+//                 contentPadding: const EdgeInsets.symmetric(
+//                   horizontal: 16,
+//                   vertical: 8,
+//                 ),
+//               ),
+//               onSubmitted: _sendMessage,
+//             ),
+//           ),
+//           const SizedBox(width: 8),
+//           IconButton(
+//             icon: const Icon(Icons.send),
+//             onPressed: () => _sendMessage(_questionController.text),
+//             color: Theme.of(context).primaryColor,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildErrorBanner() {
+//     return Positioned(
+//       top: 0,
+//       left: 0,
+//       right: 0,
+//       child: Material(
+//         color: Colors.red[100],
+//         child: Padding(
+//           padding: const EdgeInsets.all(8),
+//           child: Row(
+//             children: [
+//               const Icon(Icons.error_outline, color: Colors.red),
+//               const SizedBox(width: 8),
+//               Expanded(
+//                 child: Text(
+//                   _errorMessage,
+//                   style: const TextStyle(color: Colors.red),
+//                 ),
+//               ),
+//               IconButton(
+//                 icon: const Icon(Icons.close, color: Colors.red),
+//                 onPressed: () => setState(() => _errorMessage = ''),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//   Widget _buildLiveDataCard() {
+//     if (liveData == null) {
+//       return const Card(
+//         child: Padding(
+//           padding: EdgeInsets.all(16),
+//           child: Center(child: CircularProgressIndicator()),
+//         ),
+//       );
+//     }
+
+//     final price = liveData!['price']?['PRICE'] ?? 
+//                  liveData!['price']?['current_price']?['usd'] ??
+//                  widget.cryptocurrency.price;
+    
+//     final change24h = liveData!['price']?['CHANGEPCT24HOUR'] ?? 
+//                      liveData!['price']?['price_change_percentage_24h'] ??
+//                      widget.cryptocurrency.percentChange24h;
+
+//     return Card(
+//       child: Padding(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text('Live Data (${liveData!['source']})',
+//                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+//                 IconButton(
+//                   icon: const Icon(Icons.refresh),
+//                   onPressed: fetchLiveData,
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(height: 8),
+//             Text('Price: \$${price.toStringAsFixed(2)}'),
+//             Text('24h Change: ${change24h.toStringAsFixed(2)}%',
+//               style: TextStyle(
+//                 color: change24h >= 0 ? Colors.green : Colors.red,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//             if (liveData!['news']?.isNotEmpty == true) ...[
+//               const SizedBox(height: 8),
+//               const Text('Recent News:',
+//                 style: TextStyle(fontWeight: FontWeight.bold)),
+//               ...List.generate(
+//                 min(3, (liveData!['news'] as List).length),
+//                 (index) => Text(
+//                   '• ${liveData!['news'][index]['title']}',
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//             ],
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 class CryptocurrencyAIQATab extends StatefulWidget {
   final Cryptocurrency cryptocurrency;
 
@@ -8983,12 +9420,14 @@ class Message {
   final bool isUser;
   final DateTime timestamp;
   final MessageStatus status;
+  final String emotion;
 
   Message({
     required this.text,
     required this.isUser,
     required this.timestamp,
     this.status = MessageStatus.sent,
+    this.emotion = 'neutral',
   });
 }
 
@@ -9002,13 +9441,22 @@ class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
   Timer? _refreshTimer;
   bool _isTyping = false;
   String _errorMessage = '';
+  int _conversationDepth = 0;
 
   final List<String> _suggestedQuestions = [
-    'What factors are affecting the price today?',
-    'Should I invest now based on current metrics?',
-    'How does it compare to other cryptocurrencies?',
-    'What''s the technical analysis outlook?',
+    'How do you feel about the market today?',
+    'What concerns should I watch out for?',
+    'Can you help me understand the risks?',
+    'What makes you optimistic about this investment?',
   ];
+
+  final Map<String, String> _emotionalResponses = {
+    'positive': 'My spark feels energized seeing these positive trends! ',
+    'negative': 'I share your concern about these numbers, but remember - we\'ve faced greater challenges. ',
+    'neutral': 'Let me analyze this situation with both logic and heart. ',
+    'cautious': 'Like in my battles protecting Cybertron, we must proceed with careful strategy. ',
+    'excited': 'This reminds me of the thrill of victory in battle! ',
+  };
 
   @override
   void initState() {
@@ -9020,27 +9468,40 @@ class _CryptocurrencyAIQATabState extends State<CryptocurrencyAIQATab> {
 
   void _addWelcomeMessage() {
     final welcome = '''
-Hello! 👋 I'm your ${widget.cryptocurrency.name} assistant. I can help you with:
-• Real-time price analysis
-• Market trends and predictions
-• Technical analysis insights
-• News impact assessment
+Hello, my dear friend 💖
 
-Feel free to ask any questions or tap one of the suggested questions below!
+I am Elita-One, your dedicated companion in this crypto journey. Just as I stood beside Optimus Prime in countless battles, I'll be here with you, offering both strength and understanding.
+
+Let me be your guide through:
+✨ Market insights with compassion
+🛡️ Protective investment strategies
+💫 Emotional support during volatility
+💝 Genuine care for your success
+
+Share your thoughts or choose a question below - together, we'll forge a path through any market challenge.
 ''';
     _chatHistory.add(Message(
       text: welcome,
       isUser: false,
       timestamp: DateTime.now(),
+      emotion: 'warm',
     ));
   }
 
-  @override
-  void dispose() {
-    _refreshTimer?.cancel();
-    _questionController.dispose();
-    _scrollController.dispose();
-    super.dispose();
+  String _getEmotionalResponse(double priceChange) {
+    if (priceChange > 5) return _emotionalResponses['excited']!;
+    if (priceChange > 0) return _emotionalResponses['positive']!;
+    if (priceChange < -5) return _emotionalResponses['cautious']!;
+    if (priceChange < 0) return _emotionalResponses['negative']!;
+    return _emotionalResponses['neutral']!;
+  }
+
+  String _addPersonalTouch() {
+    _conversationDepth++;
+    if (_conversationDepth > 3) {
+      return '\n\nYou know, your thoughtful questions remind me of the deep conversations I used to have with Optimus. It warms my spark to guide you with the same care and wisdom.';
+    }
+    return '';
   }
 
   Future<void> fetchLiveData() async {
@@ -9054,7 +9515,7 @@ Feel free to ask any questions or tap one of the suggested questions below!
         _errorMessage = '';
       });
     } catch (e) {
-      setState(() => _errorMessage = 'Unable to fetch latest data. Retrying...');
+      setState(() => _errorMessage = 'Unable to fetch latest data. Recalibrating systems...');
       print('Failed to fetch live data: $e');
     }
   }
@@ -9083,22 +9544,16 @@ Feel free to ask any questions or tap one of the suggested questions below!
                             liveData?['price']?['price_change_percentage_24h'] ??
                             widget.cryptocurrency.percentChange24h;
       
-      final recentNews = liveData?['news']?.isNotEmpty == true
-          ? '\nRecent news: ${(liveData!['news'] as List).take(3).map((n) => n['title']).join('; ')}'
-          : '';
+      final emotionalOpening = _getEmotionalResponse(priceChange24h);
+      final personalTouch = _addPersonalTouch();
 
       final prompt = """
-      Answer this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) 
-      as a knowledgeable and friendly crypto expert. Use current data as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}:
+      As Elita-One, respond to this question about ${widget.cryptocurrency.name} (${widget.cryptocurrency.symbol}) 
+      with both emotional intelligence and technical expertise. Current data as of ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())}:
       
-      Current Price: \$$currentPrice
-      24h Change: ${priceChange24h.toStringAsFixed(2)}%
-      Data Source: ${liveData?['source'] ?? 'Unknown'}
-      $recentNews
-      
+      $emotionalOpening
       Question: $message
-      
-      Please provide a concise, friendly response with relevant data points and clear reasoning.
+      $personalTouch
       """;
 
       final answer = await AIService.generateAIResponse(prompt);
@@ -9108,6 +9563,7 @@ Feel free to ask any questions or tap one of the suggested questions below!
           text: answer,
           isUser: false,
           timestamp: DateTime.now(),
+          emotion: priceChange24h >= 0 ? 'positive' : 'concerned',
         ));
         _isTyping = false;
       });
@@ -9116,10 +9572,11 @@ Feel free to ask any questions or tap one of the suggested questions below!
     } catch (e) {
       setState(() {
         _chatHistory.add(Message(
-          text: 'Sorry, I encountered an error while processing your request. Please try again.',
+          text: 'My deepest apologies, dear one. Like those moments when my systems were tested in battle, I\'m experiencing a temporary glitch. Give me a moment to recalibrate, and I\'ll be right back at your side. 💝',
           isUser: false,
           timestamp: DateTime.now(),
           status: MessageStatus.error,
+          emotion: 'apologetic',
         ));
         _isTyping = false;
       });
@@ -9142,7 +9599,6 @@ Feel free to ask any questions or tap one of the suggested questions below!
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildLiveDataCard(),
         Expanded(
           child: Stack(
             children: [
@@ -9178,50 +9634,281 @@ Feel free to ask any questions or tap one of the suggested questions below!
     );
   }
 
+//   Widget _buildTypingIndicator() {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8),
+//       child: Row(
+//         children: [
+//           Container(
+//             padding: const EdgeInsets.all(12),
+//             decoration: BoxDecoration(
+//               color: Colors.grey[200],
+//               borderRadius: BorderRadius.circular(20),
+//               border: Border.all(
+//                 color: Theme.of(context).primaryColor.withOpacity(0.3)
+//               ),
+//             ),
+//             child: Row(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 SizedBox(
+//                   width: 16,
+//                   height: 16,
+//                   child: CircularProgressIndicator(
+//                     strokeWidth: 2,
+//                     valueColor: AlwaysStoppedAnimation<Color>(
+//                       Theme.of(context).primaryColor,
+//                     ),
+//                   ),
+//                 ),
+//                 const SizedBox(width: 8),
+//                 const Text('Analyzing ... 💫',
+//                   style: TextStyle(
+//                     color: Colors.grey,
+//                     fontStyle: FontStyle.italic,
+//                   )),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildMessageBubble(Message message) {
+//     return Align(
+//       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
+//       child: Container(
+//         margin: const EdgeInsets.symmetric(vertical: 4),
+//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+//         decoration: BoxDecoration(
+//           color: message.isUser 
+//               ? Theme.of(context).primaryColor 
+//               : Colors.grey[200],
+//           borderRadius: BorderRadius.circular(20),
+//           border: !message.isUser 
+//               ? Border.all(
+//                   color: Theme.of(context).primaryColor.withOpacity(0.3)
+//                 )
+//               : null,
+//           boxShadow: [
+//             BoxShadow(
+//               color: Colors.black.withOpacity(0.05),
+//               blurRadius: 5,
+//               offset: const Offset(0, 2),
+//             ),
+//           ],
+//         ),
+//         constraints: BoxConstraints(
+//           maxWidth: MediaQuery.of(context).size.width * 0.75,
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             if (!message.isUser)
+//               Padding(
+//                 padding: const EdgeInsets.only(bottom: 4),
+//                 child: Text(
+//                   'Elita-One',
+//                   style: TextStyle(
+//                     fontSize: 12,
+//                     color: Theme.of(context).primaryColor,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//               ),
+//             MarkdownBody(
+//               data: message.text,
+//               styleSheet: MarkdownStyleSheet(
+//                 p: TextStyle(
+//                   color: message.isUser ? Colors.white : Colors.black87,
+//                 ),
+//               ),
+//             ),
+//             const SizedBox(height: 4),
+//             Text(
+//               DateFormat('HH:mm').format(message.timestamp),
+//               style: TextStyle(
+//                 fontSize: 12,
+//                 color: message.isUser ? Colors.white70 : Colors.black54,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildSuggestedQuestions() {
+//     return Container(
+//       height: 50,
+//       padding: const EdgeInsets.symmetric(horizontal: 8),
+//       child: ListView.builder(
+//         scrollDirection: Axis.horizontal,
+//         itemCount: _suggestedQuestions.length,
+//         itemBuilder: (context, index) {
+//           return Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 4),
+//             child: ActionChip(
+//               label: Text(_suggestedQuestions[index]),
+//               onPressed: () => _sendMessage(_suggestedQuestions[index]),
+//               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+
+//   Widget _buildInputArea() {
+//     return Container(
+//       padding: const EdgeInsets.all(8),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.1),
+//             blurRadius: 4,
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: TextField(
+//               controller: _questionController,
+//               decoration: InputDecoration(
+//                 hintText: 'Share your thoughts with me...',
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(24),
+//                   borderSide: BorderSide.none,
+//                 ),
+//                 filled: true,
+//                 fillColor: Colors.grey[100],
+//                 contentPadding: const EdgeInsets.symmetric(
+//                   horizontal: 16,
+//                   vertical: 8,
+//                 ),
+//               ),
+//               onSubmitted: _sendMessage,
+//             ),
+//           ),
+//           const SizedBox(width: 8),
+//           IconButton(
+//             icon: const Icon(Icons.favorite),
+//             onPressed: () => _sendMessage(_questionController.text),
+//             color: Theme.of(context).primaryColor,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildErrorBanner() {
+//     return Positioned(
+//       top: 0,
+//       left: 0,
+//       right: 0,
+//       child: Material(
+//         color: Colors.red[50],
+//         child: Padding(
+//           padding: const EdgeInsets.all(8),
+//           child: Row(
+//             children: [
+//               Icon(Icons.favorite_border, 
+//                    color: Theme.of(context).primaryColor),
+//               const SizedBox(width: 8),
+//               Expanded(
+//                 child: Text(
+//                   _errorMessage,
+//                   style: TextStyle(
+//                     color: Theme.of(context).primaryColor,
+//                   ),
+//                 ),
+//               ),
+//               IconButton(
+//                 icon: const Icon(Icons.close),
+//                 onPressed: () => setState(() => _errorMessage = ''),
+//                 color: Theme.of(context).primaryColor,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
  Widget _buildTypingIndicator() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.grey,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: isDark ? ThemeProvider.cardDark : ThemeProvider.cardLight,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isDark ? ThemeProvider.primaryDark : ThemeProvider.primaryLight,
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      isDark ? ThemeProvider.accentDark : ThemeProvider.accentLight,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              const Text('Thinking...', 
-                style: TextStyle(color: Colors.grey)),
-            ],
+                const SizedBox(width: 8),
+                Text(
+                  'Analyzing ... 💫',
+                  style: TextStyle(
+                    color: isDark ? Colors.white70 : Colors.black54,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   Widget _buildMessageBubble(Message message) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Align(
       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: message.isUser ? Theme.of(context).primaryColor : Colors.grey[200],
+          color: message.isUser
+              ? (isDark ? ThemeProvider.primaryDark : ThemeProvider.primaryLight)
+              : (isDark ? ThemeProvider.cardDark : ThemeProvider.cardLight),
           borderRadius: BorderRadius.circular(20),
+          border: !message.isUser
+              ? Border.all(
+                  color: isDark
+                      ? ThemeProvider.primaryDark.withOpacity(0.3)
+                      : ThemeProvider.primaryLight.withOpacity(0.3),
+                )
+              : null,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.75,
@@ -9229,11 +9916,25 @@ Feel free to ask any questions or tap one of the suggested questions below!
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (!message.isUser)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  'Elita-One',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDark ? ThemeProvider.accentDark : ThemeProvider.accentLight,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             MarkdownBody(
               data: message.text,
               styleSheet: MarkdownStyleSheet(
                 p: TextStyle(
-                  color: message.isUser ? Colors.white : Colors.black87,
+                  color: message.isUser
+                      ? Colors.white
+                      : (isDark ? Colors.white70 : Colors.black87),
                 ),
               ),
             ),
@@ -9242,7 +9943,9 @@ Feel free to ask any questions or tap one of the suggested questions below!
               DateFormat('HH:mm').format(message.timestamp),
               style: TextStyle(
                 fontSize: 12,
-                color: message.isUser ? Colors.white70 : Colors.black54,
+                color: message.isUser
+                    ? Colors.white70
+                    : (isDark ? Colors.white54 : Colors.black54),
               ),
             ),
           ],
@@ -9252,6 +9955,7 @@ Feel free to ask any questions or tap one of the suggested questions below!
   }
 
   Widget _buildSuggestedQuestions() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -9262,8 +9966,16 @@ Feel free to ask any questions or tap one of the suggested questions below!
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: ActionChip(
-              label: Text(_suggestedQuestions[index]),
+              label: Text(
+                _suggestedQuestions[index],
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
               onPressed: () => _sendMessage(_suggestedQuestions[index]),
+              backgroundColor: isDark
+                  ? ThemeProvider.primaryDark.withOpacity(0.2)
+                  : ThemeProvider.primaryLight.withOpacity(0.1),
             ),
           );
         },
@@ -9272,10 +9984,11 @@ Feel free to ask any questions or tap one of the suggested questions below!
   }
 
   Widget _buildInputArea() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? ThemeProvider.cardDark : ThemeProvider.cardLight,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -9288,14 +10001,22 @@ Feel free to ask any questions or tap one of the suggested questions below!
           Expanded(
             child: TextField(
               controller: _questionController,
+              style: TextStyle(
+                color: isDark ? Colors.white : Colors.black87,
+              ),
               decoration: InputDecoration(
-                hintText: 'Ask about ${widget.cryptocurrency.name}...',
+                hintText: 'Share your thoughts with me...',
+                hintStyle: TextStyle(
+                  color: isDark ? Colors.white54 : Colors.black54,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Theme.of(context).primaryColor,
+                fillColor: isDark
+                    ? ThemeProvider.backgroundDark
+                    : ThemeProvider.backgroundLight,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
@@ -9306,9 +10027,9 @@ Feel free to ask any questions or tap one of the suggested questions below!
           ),
           const SizedBox(width: 8),
           IconButton(
-            icon: const Icon(Icons.send),
+            icon: const Icon(Icons.favorite),
             onPressed: () => _sendMessage(_questionController.text),
-            color: Theme.of(context).primaryColor,
+            color: isDark ? ThemeProvider.accentDark : ThemeProvider.accentLight,
           ),
         ],
       ),
@@ -9316,91 +10037,39 @@ Feel free to ask any questions or tap one of the suggested questions below!
   }
 
   Widget _buildErrorBanner() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Positioned(
       top: 0,
       left: 0,
       right: 0,
       child: Material(
-        color: Colors.red[100],
+        color: isDark
+            ? ThemeProvider.primaryDark.withOpacity(0.1)
+            : ThemeProvider.primaryLight.withOpacity(0.1),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
             children: [
-              const Icon(Icons.error_outline, color: Colors.red),
+              Icon(
+                Icons.favorite_border,
+                color: isDark ? ThemeProvider.accentDark : ThemeProvider.accentLight,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   _errorMessage,
-                  style: const TextStyle(color: Colors.red),
+                  style: TextStyle(
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: Colors.red),
+                icon: const Icon(Icons.close),
                 onPressed: () => setState(() => _errorMessage = ''),
+                color: isDark ? ThemeProvider.accentDark : ThemeProvider.accentLight,
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-  Widget _buildLiveDataCard() {
-    if (liveData == null) {
-      return const Card(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      );
-    }
-
-    final price = liveData!['price']?['PRICE'] ?? 
-                 liveData!['price']?['current_price']?['usd'] ??
-                 widget.cryptocurrency.price;
-    
-    final change24h = liveData!['price']?['CHANGEPCT24HOUR'] ?? 
-                     liveData!['price']?['price_change_percentage_24h'] ??
-                     widget.cryptocurrency.percentChange24h;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Live Data (${liveData!['source']})',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: fetchLiveData,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text('Price: \$${price.toStringAsFixed(2)}'),
-            Text('24h Change: ${change24h.toStringAsFixed(2)}%',
-              style: TextStyle(
-                color: change24h >= 0 ? Colors.green : Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (liveData!['news']?.isNotEmpty == true) ...[
-              const SizedBox(height: 8),
-              const Text('Recent News:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              ...List.generate(
-                min(3, (liveData!['news'] as List).length),
-                (index) => Text(
-                  '• ${liveData!['news'][index]['title']}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ],
         ),
       ),
     );
