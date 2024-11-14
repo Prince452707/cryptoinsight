@@ -406,7 +406,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'main.dart';
+import 'screen.dart/CryptocurrencyListItem.dart';
+import '/service.dart/json_and_others.dart';
 
 class SimilarCryptocurrenciesScreen extends StatefulWidget {
   final Cryptocurrency cryptocurrency;
