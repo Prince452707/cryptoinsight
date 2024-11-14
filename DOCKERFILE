@@ -1,0 +1,15 @@
+# Use the official Flutter image
+FROM cirrusci/flutter:stable
+
+# Set working directory
+WORKDIR /app
+
+# Copy the project files into the container
+COPY . .
+
+# Install dependencies and build the web app
+RUN flutter pub get
+RUN flutter build web
+
+# Serve the web app on port 8080
+CMD ["flutter", "pub", "global", "run", "webdev", "serve", "--hostname", "0.0.0.0", "--port", "8080"]
